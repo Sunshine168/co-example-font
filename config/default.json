@@ -1,0 +1,13 @@
+{
+  "Customer": {
+      "auth":{
+
+      }
+  },
+  "proxy":{
+    "enable":false,
+     "host":"",
+     "match":""
+  },
+  "HMR_PORT":3000
+}
