@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Provider } from 'mobx-react'
-import 'antd-mobile/dist/antd-mobile.css'
-
 import { injectGlobal, ThemeProvider } from 'styled-components'
 
-import Router from './router'
-import stores from './store'
+import { Router } from 'react-router'
+import Routes from './router'
+import stores, { history } from './store'
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
@@ -24,7 +23,9 @@ export default class App extends Component {
     return (
       <Provider {...stores}>
         <ThemeProvider theme={theme}>
-          <Router />
+          <Router history={history}>
+            <Routes />
+          </Router>
         </ThemeProvider>
       </Provider>
     )

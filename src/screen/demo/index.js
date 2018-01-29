@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
-import { Button } from 'antd-mobile'
 import { Container } from './component'
 
 
@@ -29,12 +28,12 @@ export default class Demo extends Component<Props> {
   render() {
     return (
       <Container>
-        <Button onClick={this.props.increase} inline>
+        <button onClick={this.props.increase} >
           +
-        </Button>
-        <Button onClick={this.props.decrease} inline>
+        </button>
+        <button onClick={this.props.decrease} inline>
           -
-        </Button>
+        </button>
         <div>{this.props.count}</div>
         <TestElement />
       </Container>

@@ -7,13 +7,6 @@
   "plugins": [
     ["flow-runtime"],
     "transform-decorators-legacy",
-    "react-hot-loader/babel",
-    [
-      "import",
-      {
-        "libraryName": "antd-mobile",
-        "style": "css"
-      }
-    ]
+    "react-hot-loader/babel"
   ]
 }

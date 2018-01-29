@@ -11,15 +11,16 @@
     "eslint": "eslint src"
   },
   "pre-commit": "eslint",
-  "author": "",
+  "author": "maizi",
   "dependencies": {
-    "antd-mobile": "^2.1.1",
     "browser-sync": "^2.18.13",
     "flow-runtime": "^0.16.0",
+    "history": "^4.7.2",
     "mobx": "^3.3.1",
     "mobx-react": "^4.3.4",
     "mobx-react-devtools": "^4.2.15",
     "mobx-react-router": "^4.0.1",
+    "open-browser-webpack-plugin": "^0.0.5",
     "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -80,6 +81,5 @@
     "styled-components",
     "flow"
   ],
-  "author": "maizi",
   "license": "MIT"
 }
