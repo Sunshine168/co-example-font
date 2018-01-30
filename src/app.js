@@ -12,6 +12,9 @@ injectGlobal`
    margin:0;
    padding:0;
  }
+ html,body,#app,.layout.ant-layout {
+   height:100%;
+ }
 `
 
 const theme = {

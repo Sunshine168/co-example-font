@@ -1,12 +1,9 @@
 {
-  "presets": [
-    "flow",
-    "react",
-    "stage-2"
-  ],
+  "presets": ["flow", "react", "stage-2"],
   "plugins": [
     ["flow-runtime"],
     "transform-decorators-legacy",
-    "react-hot-loader/babel"
+    "react-hot-loader/babel",
+    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
   ]
 }

@@ -31,7 +31,7 @@ export default class Demo extends Component<Props> {
         <button onClick={this.props.increase} >
           +
         </button>
-        <button onClick={this.props.decrease} inline>
+        <button onClick={this.props.decrease}>
           -
         </button>
         <div>{this.props.count}</div>
