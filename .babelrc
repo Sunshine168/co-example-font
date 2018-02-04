@@ -1,6 +1,7 @@
 {
   "presets": ["flow", "react", "stage-2"],
   "plugins": [
+    ["transform-remove-strict-mode"],
     ["flow-runtime"],
     "transform-decorators-legacy",
     "react-hot-loader/babel",

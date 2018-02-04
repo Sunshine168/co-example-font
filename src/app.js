@@ -15,6 +15,9 @@ injectGlobal`
  html,body,#app,.layout.ant-layout {
    height:100%;
  }
+ .layout.ant-layout{
+   postion:relative;
+ }
 `
 
 const theme = {
