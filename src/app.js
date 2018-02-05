@@ -12,11 +12,21 @@ injectGlobal`
    margin:0;
    padding:0;
  }
- html,body,#app,.layout.ant-layout {
-   height:100%;
+ html,body,#app{
+   /* overflow:hidden; */
+   background-color:#f0f2f5;
  }
+ html,body,#app,.layout.ant-layout {
+   height:100vh;
+ }
+ ::-webkit-scrollbar{
+    display: none
+}
  .layout.ant-layout{
-   postion:relative;
+   position:relative;
+ }
+ .avatar-uploader{
+   margin:0 auto;
  }
 `
 

@@ -1,5 +1,4 @@
 [ignore]
-.*/node_modules/*
 .*/config/*.*
 .*/script/*.js
 [include]

@@ -1,12 +1,13 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
-import { Button } from 'antd'
-
+import { inject, observer } from 'mobx-react'
+import { Button, Upload, message } from 'antd'
 import styled from 'styled-components'
-import { TextInput, EyeButton } from '../../../component'
 
+import { Icon } from '../../../component/base-style-component'
+import { TextInput, EyeButton } from '../../../component'
 import { MobxForm, validator } from '../../../util'
+import  AvatarUpload  from './avatar-upload'
 
 const FormContainer = styled.div`
   display: flex;
@@ -30,7 +31,6 @@ const fields = [
     label: '账号',
     icon: 'user',
     rules: 'required|email|string',
-    size: 15,
   },
   {
     name: 'password',
@@ -38,7 +38,25 @@ const fields = [
     placeholder: '请输入登录密码',
     rules: 'required|string|between:5,25',
     icon: 'lock',
-    size: 15,
+  },
+  {
+    name: 'confirmPwd',
+    label: '确认密码',
+    placeholder: '请确认登录密码',
+    rules: 'required|string|same password',
+    icon: 'lock',
+  },
+  {
+    name: 'nickname',
+    label: '昵称',
+    placeholder: '请输入昵称',
+    rules: 'required|string|nickname',
+    icon: 'lock',
+  },
+  {
+    name: 'avatar',
+    lable: '头像',
+    rules: 'required',
   },
 ]
 
@@ -51,6 +69,9 @@ const Form = ({ form }: FormProps) => {
     <form onSubmit={form.onSubmit}>
       <FormContainer>
         {fields.map((field) => {
+          if (field.name === 'avatar') {
+            return null
+          }
           return (
             <TextInput
               {...form.$(field.name).bind()}
@@ -59,11 +80,12 @@ const Form = ({ form }: FormProps) => {
             />
           )
         })}
+        <AvatarUpload {...form.$('avatar').bind()} />
         <ButtonGroup>
           <Button type='primary' onClick={form.onSubmit} size='large'>
-            登录
+            点击注册
           </Button>
-          <Button size='large'>注册</Button>
+          <Button size='large'>已有账号请登录</Button>
         </ButtonGroup>
       </FormContainer>
     </form>
@@ -71,4 +93,4 @@ const Form = ({ form }: FormProps) => {
 }
 
 export default observer(Form)
-export const loginInForm = new MobxForm({ fields }, { dvr: validator })
+export const registerForm = new MobxForm({ fields }, { dvr: validator })
