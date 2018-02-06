@@ -26,3 +26,44 @@ export const Icon = styled.i`
   background: url(${props => props.source});
   background-size: cover;
 `
+
+export const Bubble = styled.div`
+  position: relative;
+  min-height: 30px;
+  background-color: yellowgreen;
+  line-height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-left:15px;
+  &.bubble_right:after {
+    position: absolute;
+    top: 5px;
+    right: -18px;
+    width: 0;
+    height: 0;
+    border: 10px solid;
+    border-color: transparent;
+    border-left-color: yellowgreen !important;
+    display: inline-block;
+    content: '';
+  }
+  &.bubble_left:before {
+    position: absolute;
+    top: 5px;
+    left: -18px;
+    width: 0;
+    height: 0;
+    border: 10px solid;
+    z-index:5;
+    border-color: transparent;
+    border-right-color: yellowgreen !important;
+    display: inline-block;
+    content:'';
+  }
+`
+
+export const Text = styled.span`
+  color: ${props => (props.color ? props.color : '#1f1f1f')};
+  font-size: ${props => (props.fontSzie ? props.fontSzie : 15)}px;
+`

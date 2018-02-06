@@ -7,21 +7,30 @@ import BaseLayout from './layout'
 import Counter from './screen/demo'
 import Login from './screen/login'
 import Register from './screen/register'
+import Home from './screen/home'
 import Workspace from './screen/workspace'
 
 type PrivateRouteProps = {
   isLogin: boolean,
   location: Object,
   component: React.ComponentType<any>,
+  CustomComponent: ?React.ComponentType<any>,
 }
 
-const PrivateRoute = ({ component: Component, isLogin, ...rest }: PrivateRouteProps) => {
+const PrivateRoute = ({
+  component: Component,
+  CustomComponent,
+  isLogin,
+  ...rest
+}: PrivateRouteProps) => {
   return (
     <Route
       {...rest}
       render={props =>
         (isLogin ? (
           <Component {...props} />
+        ) : CustomComponent ? (
+          <CustomComponent {...props} />
         ) : (
           <Redirect
             to={{
@@ -45,7 +54,8 @@ class AppRouter extends React.Component<*> {
         <Route path='/counter' component={Counter} />
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
-        <PrivateRouteWithState path='/' exact component={Workspace} />
+        <PrivateRouteWithState path='/' exact component={Home} />
+        <PrivateRouteWithState path='/workspace' exact component={Workspace} />
       </Switch>
     )
   }

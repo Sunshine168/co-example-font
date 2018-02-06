@@ -9,7 +9,7 @@ import App from './src/app'
 const render = (Component) => {
   ReactDOM.render(
     <AppContainer warnings={false}>
-      <BrowserRouter basename='/insurance/'>
+      <BrowserRouter basename='/'>
         <Component />
       </BrowserRouter>
     </AppContainer>,

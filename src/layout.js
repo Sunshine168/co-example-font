@@ -45,8 +45,7 @@ const BaseLayout = ContentComponent => (props) => {
       </Header>
       <Content
         style={{
-          padding: '0 50px',
-          overflowY: 'scroll',
+          padding: '0 50px'
         }}
       >
         <Breadcrumb style={{ margin: '16px 0' }}>
