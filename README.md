@@ -9,8 +9,6 @@ Features:
  * styled-components and antd-mobile for css
  * devtools
  
- (antd-mobile conventionally is importing the module when you need so dont worry about it. or you can remove it in babelrc and dependcies as you need ~ )
-
 ## project structure
 
 ```
@@ -21,7 +19,6 @@ Features:
 │   ├── webpack.dev.js
 │   └── webpack.prod.js
 ├── flow-typed
-│   ├── antd-mobile.js
 │   ├── mobx-react.js
 │   └── npm
 ├── main.js //entry file
