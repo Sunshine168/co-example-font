@@ -5,7 +5,6 @@ import { inject, observer } from 'mobx-react'
 
 import { Container } from './component'
 
-
 type Props = {
   count: number,
   increase: () => void,
@@ -28,12 +27,8 @@ export default class Demo extends Component<Props> {
   render() {
     return (
       <Container>
-        <button onClick={this.props.increase} >
-          +
-        </button>
-        <button onClick={this.props.decrease} >
-          -
-        </button>
+        <button onClick={this.props.increase}>+</button>
+        <button onClick={this.props.decrease}>-</button>
         <div>{this.props.count}</div>
         <TestElement />
       </Container>

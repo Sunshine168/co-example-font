@@ -8,11 +8,9 @@ const routingStore = new RouterStore()
 
 export const history = syncHistoryWithStore(browserHistory, routingStore)
 
-
 const stores = {
   counter,
   routing: routingStore,
 }
 
 export default stores
-
