@@ -1,12 +1,13 @@
 // @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { Avatar, List, Input } from 'antd'
 
-import { Avatar, List } from 'antd'
-
-import { Container, Bubble } from '../../component/base-style-component'
+import { Container } from '../../component/base-style-component'
+import { Bubble } from './component'
 
 const { Item } = List
+const { TextArea } = Input
 
 const testData = [
   {
@@ -43,6 +44,9 @@ const ChatingListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  width: 400px;
+  height: 500px;
+  border: 1px solid #cfcfcf;
 `
 
 export default class Chat extends Component<*> {
@@ -55,7 +59,7 @@ export default class Chat extends Component<*> {
     const { context, msgFrom } = rowData
     return (
       <Item>
-        <Bubble className={msgFrom === 1 ? 'bubble_right' : 'bubble_left'}>{context}</Bubble>
+        <Bubble className={msgFrom === 1 ? 'right' : 'left'}>{context}</Bubble>
       </Item>
     )
   }
@@ -73,6 +77,7 @@ export default class Chat extends Component<*> {
         <ChatingListWrapper>
           <List itemLayout='vertical' dataSource={testData} renderItem={this.renderChatItem} />
         </ChatingListWrapper>
+        <TextArea />
       </Container>
     )
   }

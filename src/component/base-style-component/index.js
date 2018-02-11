@@ -28,39 +28,80 @@ export const Icon = styled.i`
 `
 
 export const Bubble = styled.div`
+  padding: 6px;
+  overflow: hidden;
   position: relative;
-  min-height: 30px;
-  background-color: yellowgreen;
-  line-height: 30px;
-  padding: 0 10px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-left:15px;
-  &.bubble_right:after {
-    position: absolute;
-    top: 5px;
-    right: -18px;
-    width: 0;
-    height: 0;
-    border: 10px solid;
-    border-color: transparent;
-    border-left-color: yellowgreen !important;
-    display: inline-block;
-    content: '';
-  }
-  &.bubble_left:before {
-    position: absolute;
-    top: 5px;
-    left: -18px;
-    width: 0;
-    height: 0;
-    border: 10px solid;
-    z-index:5;
-    border-color: transparent;
-    border-right-color: yellowgreen !important;
-    display: inline-block;
-    content:'';
-  }
+  &:after {
+      clear: both;
+      content: '';
+    }
+    & .content {
+      width: auto;
+      padding: 0.7em 0.5em;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid;
+      position: relative;
+      display: inline-block;
+    }
+    & .content:before {
+      content: '';
+      display: inline-block;
+      box-sizing: border-box;
+      width: 12px;
+      height: 12px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      position: absolute;
+      background-color: inherit;
+      border-right-color: inherit;
+      border-bottom-color: inherit;
+    }
+    & a.avatar {
+      display: block;
+      height: 44px;
+      width: 44px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    & a.avatar > img {
+      width: 100%;
+      height: 100%;
+    }
+    &.left a.avatar {
+      float: left;
+    }
+    &.right a.avatar {
+      float: right;
+    }
+    &.left {
+      text-align: left;
+    }
+    &.right {
+      text-align: right;
+    }
+    & .wrap {
+      margin:0 56px;
+    }
+    &.left .content {
+        background: #fafafa;
+        border-color: #c6c6c6;
+    }
+    &.left .content:before {
+      left: -6px;
+      top: 16px;
+      transform: rotate(135deg);
+    }
+    &.right .content {
+      background: #b3e866;
+      border-color: #9ab96b;
+      text-align: left;
+    }
+    &.right .content:before {
+      right: -6px;
+      top: 16px;
+      transform: rotate(-45deg);
+    }
 `
 
 export const Text = styled.span`

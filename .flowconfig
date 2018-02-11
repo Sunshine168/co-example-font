@@ -1,6 +1,7 @@
 [ignore]
 .*/config/*.*
 .*/script/*.js
+.*/node_modules/*
 [include]
 
 [libs]
