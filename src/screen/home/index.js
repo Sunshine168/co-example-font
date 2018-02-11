@@ -4,7 +4,6 @@ import { List, Card, Layout, Menu, Breadcrumb, Icon } from 'antd'
 
 import ImgCard from './component/img-card'
 
-
 const { SubMenu } = Menu
 const {
   Header, Content, Footer, Sider,

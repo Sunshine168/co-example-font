@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Icon } from '../../../component/base-style-component'
 import { TextInput, EyeButton } from '../../../component'
 import { MobxForm, validator } from '../../../util'
-import  AvatarUpload  from './avatar-upload'
+import AvatarUpload from './avatar-upload'
 
 const FormContainer = styled.div`
   display: flex;

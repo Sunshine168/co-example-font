@@ -45,7 +45,9 @@ const PrivateRoute = ({
 }
 
 /* eslint-disable max-len */
-const PrivateRouteWithState = inject(stores => ({ isLogin: stores.user.isLogin }))(observer(PrivateRoute))
+const PrivateRouteWithState = inject(stores => ({
+  isLogin: stores.user.isLogin,
+}))(observer(PrivateRoute))
 
 class AppRouter extends React.Component<*> {
   render() {

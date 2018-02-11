@@ -34,7 +34,10 @@ const BaseMenu = (props: BaseMenuProps) => {
   )
 }
 
-const BaseMenuWithInject = inject(stores => ({ routing: stores.routing, user: stores.user }))(observer(BaseMenu))
+const BaseMenuWithInject = inject(stores => ({
+  routing: stores.routing,
+  user: stores.user,
+}))(observer(BaseMenu))
 
 const BaseLayout = ContentComponent => (props) => {
   return (
@@ -45,7 +48,7 @@ const BaseLayout = ContentComponent => (props) => {
       </Header>
       <Content
         style={{
-          padding: '0 50px'
+          padding: '0 50px',
         }}
       >
         <Breadcrumb style={{ margin: '16px 0' }}>

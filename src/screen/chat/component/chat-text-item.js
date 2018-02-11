@@ -4,7 +4,7 @@ import { Bubble } from '../../../component/base-style-component'
 const BubbleComponent = ({ children, bgColor, className }) => {
   return (
     <Bubble className={className}>
-      <a className='avatar' >
+      <a className='avatar'>
         <img src='http://res.jsrun.net/avatar/2464_1491377479769.png' />
       </a>
       <div className='wrap'>
