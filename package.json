@@ -38,7 +38,8 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "rfx-core": "^1.5.3",
-    "styled-components": "^3.1.6"
+    "styled-components": "^3.1.6",
+    "validatorjs": "^3.14.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
