@@ -1,5 +1,6 @@
 /* @flow */
 import { observable, action } from 'mobx'
+import { post } from '../util/'
 
 class User {
   @observable loading: boolean = false
@@ -26,6 +27,12 @@ class User {
   @action.bound
   setPersonInfoEditable() {
     this.personInfoEditable = !this.personInfoEditable
+  }
+
+  @action.bound
+  async login(user, sucCb) {
+    const result = await post('/signIn', user)
+    console.log(result)
   }
 }
 

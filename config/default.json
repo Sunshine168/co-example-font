@@ -1,13 +1,11 @@
 {
-  "Customer": {
-      "auth":{
-
-      }
+    "auth": {
+      "csrfToken": "xVMvDgszrYZWmg9h278vFpyU"
+    },
+  "proxy": {
+    "enable": true,
+    "host": "http://localhost:7001/",
+    "match": ""
   },
-  "proxy":{
-    "enable":false,
-     "host":"",
-     "match":""
-  },
-  "HMR_PORT":3000
+  "HMR_PORT": 3000
 }

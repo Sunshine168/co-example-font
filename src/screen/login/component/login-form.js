@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import { Button } from 'antd'
 
 import styled from 'styled-components'
@@ -25,7 +25,7 @@ const ButtonGroup = styled.div`
 
 const fields = [
   {
-    name: 'phone',
+    name: 'account',
     placeholder: '请输入账户名/手机号',
     label: '账号',
     icon: 'user',
@@ -44,21 +44,19 @@ const fields = [
 
 type FormProps = {
   form: Object,
+  pwdVisible: boolean,
 }
 
-const Form = ({ form }: FormProps) => {
+const Form = ({ form, pwdVisible }: FormProps) => {
   return (
     <form onSubmit={form.onSubmit}>
       <FormContainer>
-        {fields.map((field) => {
-          return (
-            <TextInput
-              {...form.$(field.name).bind()}
-              addonAfter={field.name === 'password' ? <EyeButton /> : null}
-              key={field.name}
-            />
-          )
-        })}
+        <TextInput {...form.$('account').bind()} />
+        <TextInput
+          {...form.$('password').bind()}
+          addonAfter={<EyeButton />}
+          type={pwdVisible ? 'text' : 'password'}
+        />
         <ButtonGroup>
           <Button type='primary' onClick={form.onSubmit} size='large'>
             登录
@@ -70,5 +68,7 @@ const Form = ({ form }: FormProps) => {
   )
 }
 
-export default observer(Form)
+export default inject(stores => ({
+  pwdVisible: stores.user.pwdVisible,
+}))(observer(Form))
 export const loginInForm = new MobxForm({ fields }, { dvr: validator })

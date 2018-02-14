@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Provider } from 'mobx-react'
 import { injectGlobal, ThemeProvider } from 'styled-components'
-
 import { Router } from 'react-router'
+import 'antd/dist/antd.css'
+
 import Routes from './router'
 import stores, { history } from './store'
 

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Avatar, List, Input } from 'antd'
 
 import { Container } from '../../component/base-style-component'
-import { Bubble } from './component'
+import { Bubble, ChatInput } from './component'
 
 const { Item } = List
 const { TextArea } = Input
@@ -37,6 +37,7 @@ const UserListWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
+  padding: 20px 25px;
 `
 
 const ChatingListWrapper = styled.div`
@@ -77,7 +78,7 @@ export default class Chat extends Component<*> {
         <ChatingListWrapper>
           <List itemLayout='vertical' dataSource={testData} renderItem={this.renderChatItem} />
         </ChatingListWrapper>
-        <TextArea />
+        <ChatInput />
       </Container>
     )
   }

@@ -9,7 +9,6 @@ type EyeButtonProps = {
 }
 
 const EyeButton = ({ pwdVisible, setPwdVisible }: EyeButtonProps) => {
-  console.log(pwdVisible)
   return (
     <Icon
       onClick={() => {

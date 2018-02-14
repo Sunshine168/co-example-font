@@ -2106,9 +2106,9 @@ concat-stream@^1.4.6, concat-stream@^1.4.7, concat-stream@^1.5.0, concat-stream@
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-config@^1.28.1:
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/config/-/config-1.29.0.tgz#f89190095ec8cfe886ea52b7d3d96cadfa577b7f"
+config@^1.29.4:
+  version "1.29.4"
+  resolved "https://registry.npmjs.org/config/-/config-1.29.4.tgz#1b42752ed86b363fc4025960569fd74978862a92"
   dependencies:
     json5 "0.4.0"
     os-homedir "1.0.2"
@@ -2851,6 +2851,10 @@ elliptic@^6.0.0:
 emitter-steward@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/emitter-steward/-/emitter-steward-1.0.0.tgz#f3411ade9758a7565df848b2da0cbbd1b46cbd64"
+
+emoji-mart@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.npmjs.org/emoji-mart/-/emoji-mart-2.4.2.tgz#df8051df6842e23b081df7d5b21418c491c44fcc"
 
 emoji-regex@^6.1.0:
   version "6.5.1"
@@ -4738,6 +4742,10 @@ jest-validate@^21.1.0:
 js-base64@^2.1.9:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.0.tgz#9e566fee624751a1d720c966cd6226d29d4025aa"
+
+js-cookie@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"

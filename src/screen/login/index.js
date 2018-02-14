@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { observer, inject } from 'mobx-react'
 
 import { PanelContainer as Container } from '../../component/base-style-component'
 import Form, { loginInForm } from './component/login-form'
@@ -18,13 +19,19 @@ export const Logo = styled.h3`
   font-size: 32px;
 `
 
+@inject(['user'])
+@observer
 export default class Login extends Component<Props> {
   constructor(props: Props) {
     super(props)
-    this.form = loginInForm
-    this.form.$hooks = {
-      onSuccess: () => {},
-      onError: () => {},
+    loginInForm.$hooks = {
+      onSuccess: (form) => {
+        const { user } = this.props
+        user.login(form.values())
+      },
+      onError: (form) => {
+        console.log(form.errors())
+      },
     }
   }
   render() {
@@ -33,7 +40,7 @@ export default class Login extends Component<Props> {
         <LogoWrapper>
           <Logo>在线协图</Logo>
         </LogoWrapper>
-        <Form form={this.form} />
+        <Form form={loginInForm} />
       </Container>
     )
   }
