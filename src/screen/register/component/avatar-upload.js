@@ -1,9 +1,15 @@
 // @flow
 import React from 'react'
 import { inject, observer } from 'mobx-react'
+import { observable } from 'mobx'
 import { Button, Upload, message, Icon } from 'antd'
 
 import styled from 'styled-components'
+
+const AvatarPreview = styled.img`
+  width: 100px;
+  height: 100px;
+`
 
 function getBase64(img, callback) {
   const reader = new FileReader()
@@ -25,42 +31,41 @@ function beforeUpload(file) {
 
 @observer
 export default class AvatarUpload extends React.Component {
-  state = {
-    loading: false,
-  }
+  @observable imageUrl = ''
+  @observable loading = false
   handleChange = (info) => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true })
+      this.loading = false
       return
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }))
+      getBase64(info.file.originFileObj, (imageUrl) => {
+        this.props.onChange(info.file.response.url)
+        this.imageUrl = imageUrl
+      })
     }
   }
   render() {
+    const { loading, imageUrl } = this
     const uploadButton = (
       <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <Icon type={loading ? 'loading' : 'plus'} />
         <div className='ant-upload-text'>Upload</div>
       </div>
     )
-    const imageUrl = this.state.imageUrl
+
     return (
       <Upload
         name='avatar'
         listType='picture-card'
         className='avatar-uploader'
         showUploadList={false}
-        action='//jsonplaceholder.typicode.com/posts/'
+        action='/upload'
         beforeUpload={beforeUpload}
         onChange={this.handleChange}
       >
-        {imageUrl ? <img src={imageUrl} alt='' /> : uploadButton}
+        {imageUrl ? <AvatarPreview src={imageUrl} alt='' /> : uploadButton}
       </Upload>
     )
   }

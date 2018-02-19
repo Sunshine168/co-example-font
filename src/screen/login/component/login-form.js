@@ -45,9 +45,10 @@ const fields = [
 type FormProps = {
   form: Object,
   pwdVisible: boolean,
+  toRegister(): void,
 }
 
-const Form = ({ form, pwdVisible }: FormProps) => {
+const Form = ({ form, pwdVisible, toRegister }: FormProps) => {
   return (
     <form onSubmit={form.onSubmit}>
       <FormContainer>
@@ -61,7 +62,9 @@ const Form = ({ form, pwdVisible }: FormProps) => {
           <Button type='primary' onClick={form.onSubmit} size='large'>
             登录
           </Button>
-          <Button size='large'>注册</Button>
+          <Button size='large' onClick={toRegister}>
+            注册
+          </Button>
         </ButtonGroup>
       </FormContainer>
     </form>

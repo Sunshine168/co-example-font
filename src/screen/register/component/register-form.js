@@ -26,8 +26,8 @@ const ButtonGroup = styled.div`
 
 const fields = [
   {
-    name: 'phone',
-    placeholder: '请输入账户名/手机号',
+    name: 'account',
+    placeholder: '请输入邮箱',
     label: '账号',
     icon: 'user',
     rules: 'required|email|string',
@@ -57,6 +57,7 @@ const fields = [
     name: 'avatar',
     lable: '头像',
     rules: 'required',
+    value: '',
   },
 ]
 
@@ -64,7 +65,7 @@ type FormProps = {
   form: Object,
 }
 
-const Form = ({ form }: FormProps) => {
+const Form = ({ form, toLogin }: FormProps) => {
   return (
     <form onSubmit={form.onSubmit}>
       <FormContainer>
@@ -85,7 +86,9 @@ const Form = ({ form }: FormProps) => {
           <Button type='primary' onClick={form.onSubmit} size='large'>
             点击注册
           </Button>
-          <Button size='large'>已有账号请登录</Button>
+          <Button size='large' onClick={toLogin}>
+            已有账号请登录
+          </Button>
         </ButtonGroup>
       </FormContainer>
     </form>

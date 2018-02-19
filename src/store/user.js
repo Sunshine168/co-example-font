@@ -3,21 +3,10 @@ import { observable, action } from 'mobx'
 import { post } from '../util/'
 
 class User {
-  @observable loading: boolean = false
-  @observable isAutoLogin: boolean = false
-  @observable pwdVisible: boolean = false
-  @observable personInfoEditable: boolean = false
-  @observable isLogin: boolean = true
-
-  @action.bound
-  async loginIn() {
-    this.loading = true
-  }
-
-  @action.bound
-  setAutoLogin() {
-    this.isAutoLogin = !this.isAutoLogin
-  }
+  @observable loginIning = false
+  @observable registerIng = false
+  @observable pwdVisible = false
+  @observable isLogin = true
 
   @action.bound
   setPwdVisible() {
@@ -25,16 +14,29 @@ class User {
   }
 
   @action.bound
-  setPersonInfoEditable() {
-    this.personInfoEditable = !this.personInfoEditable
+  async login(user, sucCb) {
+    this.loginIning = true
+    const result: Object = await post('/signIn', user)
+    this.loginIning = false
+    sucCb(result)
   }
 
   @action.bound
-  async login(user, sucCb) {
-    const result = await post('/signIn', user)
-    console.log(result)
+  async register(user, sucCb) {
+    this.registerIng = true
+    const result: Object = await post('/signUp', user)
+    this.registerIng = false
+    sucCb(result)
   }
 }
 
-const self = new User()
+export type IUser = {
+  loginIning: boolean,
+  pwdVisible: boolean,
+  isLogin: boolean,
+  setPwdVisible(): void,
+  login(user: Object, sucCb: (res: Object) => void): Promise<*>,
+}
+
+const self: IUser = new User()
 export default self
