@@ -56,7 +56,8 @@ type CreateModalProps = {
 @observer
 export default class CreateModal extends Component<CreateModalProps> {
   handleOk = () => {
-    const { setVisible } = this.props
+    const { setVisible, form } = this.props
+    form.onSubmit()
     setVisible(false)
   }
 

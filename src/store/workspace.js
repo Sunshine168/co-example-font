@@ -7,6 +7,7 @@ class WorkSpace {
   @observable createModalLoading = false
   @observable auditModalVisible = false
   @observable auditModalLoading = false
+  @observable rooms = []
 
   @action.bound
   setCreateModalVisible(visible) {
@@ -19,7 +20,16 @@ class WorkSpace {
   }
 
   @action.bound
-  async getAllRooms() {}
+  async getAllRooms() {
+    const result = await post('/workspace/info')
+    console.log(result)
+  }
+
+  @action.bound
+  async createRoom(room) {
+    const result = await post('/workspace/createRoom')
+    console.log(result)
+  }
 }
 
 export type IWorkSpace = {

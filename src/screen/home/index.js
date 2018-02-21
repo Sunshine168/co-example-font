@@ -4,8 +4,8 @@ import { List, Card, Layout, Menu, Breadcrumb, Icon } from 'antd'
 import { inject, observer } from 'mobx-react'
 
 import ImgCard from './component/img-card'
-import CreateModal, { createRoomForm } from './component/create-model'
-import AuditModal from './component/audit-model'
+import CreateModal, { createRoomForm } from './component/create-modal'
+import AuditModal from './component/audit-modal'
 
 const { SubMenu } = Menu
 const { Content, Sider } = Layout
@@ -88,9 +88,18 @@ const testData = [
 @inject(stores => ({
   showAuditModal: () => stores.workspace.setAuditModalVisible(true),
   showCreateModal: () => stores.workspace.setCreateModalVisible(true),
+  createRoom: stores.workspace.createRoom,
 }))
 @observer
 export default class WorkspaceScreen extends Component {
+  constructor(props) {
+    super(props)
+    createRoomForm.$hooks = {
+      onSuccess: (form) => {
+        this.props.createRoom(form.values(), () => {})
+      },
+    }
+  }
   menuControl = (item) => {
     const { showAuditModal, showCreateModal } = this.props
     if (item.key === '4') {

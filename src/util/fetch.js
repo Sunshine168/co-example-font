@@ -50,9 +50,7 @@ function postErrorHandler(err) {
 
 async function post(url, data) {
   const result = await myFetch(url, data)
-  console.log(result)
   let { res, err } = result
-  console.log(err)
   if (err) {
     postErrorHandler('网络错误')
     return new Promise((resolve, reject) => {
@@ -67,9 +65,10 @@ async function post(url, data) {
   } else if (resCode === 200) {
     err = null
   } else if (resCode === 401) {
-    // toast('身份角色错误，需要重新登录', TOAST_ERROR)
     emitter.emit('NAVIGATION_NAVIGATE_TO', 'Login')
     err = message
+  } else if (resCode === 403) {
+    // 请勿重复登录
   }
   return new Promise((resolve) => {
     return resolve(resData)

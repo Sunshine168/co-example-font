@@ -40,11 +40,11 @@ class User {
   @action.bound
   async loginOut(sucCb) {
     try {
-      const result: Object = await post('/signOut')
+      await post('/signOut')
       this.clearUser()
       sucCb()
     } catch (e) {
-      console.log(e)
+      //
     }
   }
 

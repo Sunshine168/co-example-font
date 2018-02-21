@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import DevTools from 'mobx-react-devtools'
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Menu, Breadcrumb, notification } from 'antd'
 import { observer, inject } from 'mobx-react'
 
 const { Header, Content, Footer } = Layout
@@ -22,7 +22,10 @@ const BaseMenu = (props: BaseMenuProps) => {
       style={{ lineHeight: '64px' }}
       onClick={(item) => {
         if (item.key === '3') {
-          user.loginOut(() => props.routing.push(item.item.props.path))
+          user.loginOut(() => {
+            props.routing.push(item.item.props.path)
+            notification.success('注销成功')
+          })
         } else {
           props.routing.push(item.item.props.path)
         }
