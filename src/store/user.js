@@ -1,13 +1,18 @@
 /* @flow */
 import { observable, action } from 'mobx'
+import { persist } from 'mobx-persist'
 import { post } from '../util/'
 
 class User {
   @observable loginIning = false
   @observable registerIng = false
   @observable pwdVisible = false
-  @observable isLogin = false
-  @observable user = null
+  @persist
+  @observable
+  isLogin = false
+  @persist('object')
+  @observable
+  user = null
 
   @action.bound
   setPwdVisible() {
@@ -66,4 +71,5 @@ export type IUser = {
 }
 
 const self: IUser = new User()
+
 export default self

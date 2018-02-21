@@ -24,7 +24,9 @@ const BaseMenu = (props: BaseMenuProps) => {
         if (item.key === '3') {
           user.loginOut(() => {
             props.routing.push(item.item.props.path)
-            notification.success('注销成功')
+            notification.success({
+              message: '注销成功',
+            })
           })
         } else {
           props.routing.push(item.item.props.path)
