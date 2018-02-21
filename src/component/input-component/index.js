@@ -2,6 +2,8 @@
 import * as React from 'react'
 import { Form, Input } from 'antd'
 
+import Select from './select'
+
 const FormItem = Form.Item
 
 type InputWithErrorProps = {
@@ -46,4 +48,16 @@ const TextInput = (props: InputWithErrorProps) => {
   )
 }
 
+export const AutoInput = ({ type, ...props }) => {
+  if (!type || type === 'textInput') {
+    return <TextInput {...props} />
+  }
+  if (type === 'selectInput') {
+    return <Select {...props} />
+  }
+  return null
+}
+
+export const SelectInput = Select
+export { default as ImgUpload } from './img-upload'
 export default TextInput

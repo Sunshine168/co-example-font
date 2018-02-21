@@ -1,12 +1,11 @@
 // @flow
 import React from 'react'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { observable } from 'mobx'
-import { Button, Upload, message, Icon } from 'antd'
-
+import { Upload, message, Icon } from 'antd'
 import styled from 'styled-components'
 
-const AvatarPreview = styled.img`
+const ImgPreview = styled.img`
   width: 100px;
   height: 100px;
 `
@@ -30,7 +29,7 @@ function beforeUpload(file) {
 }
 
 @observer
-export default class AvatarUpload extends React.Component {
+export default class ImgUpload extends React.Component {
   @observable imageUrl = ''
   @observable loading = false
   handleChange = (info) => {
@@ -65,7 +64,7 @@ export default class AvatarUpload extends React.Component {
         beforeUpload={beforeUpload}
         onChange={this.handleChange}
       >
-        {imageUrl ? <AvatarPreview src={imageUrl} alt='' /> : uploadButton}
+        {imageUrl ? <ImgPreview src={imageUrl} alt='' /> : uploadButton}
       </Upload>
     )
   }

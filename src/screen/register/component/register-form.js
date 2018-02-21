@@ -1,13 +1,12 @@
 // @flow
 import React from 'react'
-import { inject, observer } from 'mobx-react'
-import { Button, Upload, message } from 'antd'
+import { observer } from 'mobx-react'
+import { Button } from 'antd'
 import styled from 'styled-components'
 
-import { Icon } from '../../../component/base-style-component'
-import { TextInput, EyeButton } from '../../../component'
+import EyeButton from '../../../component/eye-button'
 import { MobxForm, validator } from '../../../util'
-import AvatarUpload from './avatar-upload'
+import TextInput, { ImgUpload } from '../../../component/input-component'
 
 const FormContainer = styled.div`
   display: flex;
@@ -81,7 +80,7 @@ const Form = ({ form, toLogin }: FormProps) => {
             />
           )
         })}
-        <AvatarUpload {...form.$('avatar').bind()} />
+        <ImgUpload {...form.$('avatar').bind()} />
         <ButtonGroup>
           <Button type='primary' onClick={form.onSubmit} size='large'>
             点击注册

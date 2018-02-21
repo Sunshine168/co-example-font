@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { List, Card, Layout, Menu, Breadcrumb, Icon } from 'antd'
+import { observable, action } from 'mobx'
+import { observer } from 'mobx-react'
 
 import ImgCard from './component/img-card'
+import CreateModal, { createRoomForm } from './component/create-model'
 
 const { SubMenu } = Menu
-const {
-  Header, Content, Footer, Sider,
-} = Layout
+const { Content, Sider } = Layout
 
 const testData = [
   {
@@ -83,7 +84,24 @@ const testData = [
     description: '455',
   },
 ]
+
+@observer
 export default class WorkspaceScreen extends Component {
+  @action.bound
+  setCreateModalVisible(visible) {
+    this.createModalVisible = visible
+  }
+
+  @action.bound
+  setAuditModalVisible(visible) {
+    this.auditModalVisible = visible
+  }
+
+  @observable createModalVisible = false
+  @observable createModalLoading = false
+  @observable auditModalVisible = false
+  @observable auditModalLoading = false
+
   render() {
     return (
       <Layout
@@ -107,9 +125,20 @@ export default class WorkspaceScreen extends Component {
                 </span>
               }
             >
-              <Menu.Item key='1'>协助台</Menu.Item>
-              <Menu.Item key='2'>协作室</Menu.Item>
-              <Menu.Item key='3'>教程</Menu.Item>
+              <Menu.Item key='1'>所有</Menu.Item>
+              <Menu.Item key='2'>创建的协作</Menu.Item>
+              <Menu.Item key='3'>参与的协作</Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key='sub2'
+              title={
+                <span>
+                  <Icon type='api' />管理
+                </span>
+              }
+            >
+              <Menu.Item key='1'>创建一个新房间</Menu.Item>
+              <Menu.Item key='2'>审核</Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -132,6 +161,11 @@ export default class WorkspaceScreen extends Component {
             )}
           />
         </Content>
+        <CreateModal
+          visible={this.createModalVisible}
+          form={createRoomForm}
+          setVisbile={this.setCreateModalVisible}
+        />
       </Layout>
     )
   }
