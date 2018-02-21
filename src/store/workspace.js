@@ -27,7 +27,7 @@ class WorkSpace {
 
   @action.bound
   async createRoom(room) {
-    const result = await post('/workspace/createRoom')
+    const result = await post('/workspace/createRoom', room)
     console.log(result)
   }
 }

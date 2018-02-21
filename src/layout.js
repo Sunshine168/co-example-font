@@ -1,12 +1,20 @@
 // @flow
 import React from 'react'
+import styled from 'styled-components'
 import DevTools from 'mobx-react-devtools'
-import { Layout, Menu, Breadcrumb, notification } from 'antd'
+import { Layout, Menu, Breadcrumb, notification, Avatar } from 'antd'
 import { observer, inject } from 'mobx-react'
 
 const { Header, Content, Footer } = Layout
 
 const { SubMenu } = Menu
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
 
 type BaseMenuProps = {
   routing: Object,
@@ -54,6 +62,25 @@ const BaseMenu = (props: BaseMenuProps) => {
   )
 }
 
+const UserStauts = ({ user }) => {
+  if (!user.user) {
+    return null
+  }
+  return (
+    <div>
+      {user.user.nickname}
+      <Avatar
+        scr={user.user.Avatar}
+        style={{
+          marginLeft: 10,
+        }}
+      />
+    </div>
+  )
+}
+
+const UserStautsWithInject = inject(['user'])(observer(UserStauts))
+
 const BaseMenuWithInject = inject(stores => ({
   routing: stores.routing,
   user: stores.user,
@@ -71,11 +98,14 @@ const BaseLayout = ContentComponent => (props) => {
           padding: '0 50px',
         }}
       >
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
+        <Row>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>List</Breadcrumb.Item>
+            <Breadcrumb.Item>App</Breadcrumb.Item>
+          </Breadcrumb>
+          <UserStautsWithInject />
+        </Row>
         <ContentComponent {...props} />
         <DevTools />
       </Content>

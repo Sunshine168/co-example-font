@@ -22,7 +22,7 @@ const fields = [
     rules: 'string|between:5,25',
   },
   {
-    name: 'permission',
+    name: 'permissions',
     label: '房间权限',
     placeholder: '请设置房间权限',
     rules: 'required|number',
@@ -55,10 +55,10 @@ type CreateModalProps = {
 }))
 @observer
 export default class CreateModal extends Component<CreateModalProps> {
-  handleOk = () => {
+  handleOk = (e) => {
     const { setVisible, form } = this.props
-    form.onSubmit()
-    setVisible(false)
+    form.onSubmit(e)
+    // setVisible(false)
   }
 
   handleCancel = () => {
@@ -87,7 +87,7 @@ export default class CreateModal extends Component<CreateModalProps> {
         <Form>
           <TextInput {...form.$('name').bind()} />
           <ImgUpload {...form.$('img').bind()} />
-          <SelectInput {...form.$('permission').bind()} options={form.$('permission').extra} />
+          <SelectInput {...form.$('permissions').bind()} options={form.$('permissions').extra} />
         </Form>
       </Modal>
     )

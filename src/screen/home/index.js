@@ -96,6 +96,7 @@ export default class WorkspaceScreen extends Component {
     super(props)
     createRoomForm.$hooks = {
       onSuccess: (form) => {
+        console.log(form.values())
         this.props.createRoom(form.values(), () => {})
       },
     }
