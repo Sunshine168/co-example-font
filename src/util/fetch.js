@@ -19,6 +19,7 @@ function myFetch(url, data) {
     method: 'POST',
     headers: header,
     body: JSON.stringify(bodyData),
+    credentials: 'same-origin',
   })
     .then((res) => {
       if (res && res.status === 200) {
@@ -44,13 +45,20 @@ function postErrorHandler(err) {
   if (typeof err === 'object') {
     config = err
   }
-  console.log(config)
   notification.error(config)
 }
 
 async function post(url, data) {
   const result = await myFetch(url, data)
+  console.log(result)
   let { res, err } = result
+  console.log(err)
+  if (err) {
+    postErrorHandler('网络错误')
+    return new Promise((resolve, reject) => {
+      return reject(err)
+    })
+  }
   // 预留处理外层code错误
   const { resCode, message, data: resData } = res
   if (resCode === 500) {
@@ -61,13 +69,10 @@ async function post(url, data) {
   } else if (resCode === 401) {
     // toast('身份角色错误，需要重新登录', TOAST_ERROR)
     emitter.emit('NAVIGATION_NAVIGATE_TO', 'Login')
-    err = new Error(message)
+    err = message
   }
-  return new Promise((resolve, reject) => {
-    if (data) {
-      return resolve(resData)
-    }
-    return reject(err)
+  return new Promise((resolve) => {
+    return resolve(resData)
   })
 }
 
