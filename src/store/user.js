@@ -6,7 +6,8 @@ class User {
   @observable loginIning = false
   @observable registerIng = false
   @observable pwdVisible = false
-  @observable isLogin = true
+  @observable isLogin = false
+  @observable user = null
 
   @action.bound
   setPwdVisible() {
@@ -17,8 +18,34 @@ class User {
   async login(user, sucCb) {
     this.loginIning = true
     const result: Object = await post('/signIn', user)
-    this.loginIning = false
-    sucCb(result)
+    if (result) {
+      this.setUser(result)
+      this.loginIning = false
+      sucCb(result)
+    }
+  }
+
+  @action.bound
+  setUser(user) {
+    this.user = user
+    this.isLogin = true
+  }
+
+  @action.bound
+  clearUser() {
+    this.user = null
+    this.isLogin = false
+  }
+
+  @action.bound
+  async loginOut(sucCb) {
+    try {
+      const result: Object = await post('/signOut')
+      this.clearUser()
+      sucCb()
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   @action.bound

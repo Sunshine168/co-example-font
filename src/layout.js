@@ -6,11 +6,14 @@ import { observer, inject } from 'mobx-react'
 
 const { Header, Content, Footer } = Layout
 
+const { SubMenu } = Menu
+
 type BaseMenuProps = {
   routing: Object,
 }
 
 const BaseMenu = (props: BaseMenuProps) => {
+  const { user } = props
   return (
     <Menu
       theme='dark'
@@ -18,15 +21,27 @@ const BaseMenu = (props: BaseMenuProps) => {
       defaultSelectedKeys={['2']}
       style={{ lineHeight: '64px' }}
       onClick={(item) => {
-        props.routing.push(item.item.props.path)
+        if (item.key === '3') {
+          user.loginOut(() => props.routing.push(item.item.props.path))
+        } else {
+          props.routing.push(item.item.props.path)
+        }
       }}
     >
       <Menu.Item key='1' path='/'>
         首页
       </Menu.Item>
-      <Menu.Item key='2' path='/login'>
-        登录/注册
-      </Menu.Item>
+      <SubMenu title='操作'>
+        {!user.isLogin ? (
+          <Menu.Item key='2' path='/login'>
+            登录/注册
+          </Menu.Item>
+        ) : (
+          <Menu.Item key='3' path='/login'>
+            注销
+          </Menu.Item>
+        )}
+      </SubMenu>
       <Menu.Item key='3' path='/about'>
         关于我
       </Menu.Item>
