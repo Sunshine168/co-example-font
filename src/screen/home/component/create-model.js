@@ -1,5 +1,6 @@
+// @flow
 import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import { Modal, Button, Form } from 'antd'
 
 import TextInput, { SelectInput, ImgUpload } from '../../../component/input-component'
@@ -26,44 +27,66 @@ const fields = [
     placeholder: '请设置房间权限',
     rules: 'required|number',
     default: true,
-    initial: 0,
-    options: [
+    initial: '0',
+    extra: [
       {
-        value: 0,
+        value: '0',
         label: '公开房间',
       },
       {
-        value: 1,
+        value: '1',
         label: '限制房间',
       },
     ],
   },
 ]
 
+type CreateModalProps = {
+  visible: boolean,
+  loading: boolean,
+  setVisible(visible: boolean): void,
+  form: Object,
+}
+
+@inject(stores => ({
+  visible: stores.workspace.createModalVisible,
+  loading: stores.workspace.createModalLoading,
+  setVisible: stores.workspace.setCreateModalVisible,
+}))
 @observer
-export default class CreateModel extends Component {
+export default class CreateModal extends Component<CreateModalProps> {
+  handleOk = () => {
+    const { setVisible } = this.props
+    setVisible(false)
+  }
+
+  handleCancel = () => {
+    const { setVisible } = this.props
+    setVisible(false)
+  }
+
   render() {
-    const { form } = this.props
+    const { form, visible, loading } = this.props
     return (
       <Modal
-        visible={this.visible}
-        title='Title'
+        visible={visible}
+        title='创建房间'
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         footer={[
           <Button key='back' onClick={this.handleCancel}>
-            Return
+            取消
           </Button>,
-          <Button key='submit' type='primary' loading={this.loading} onClick={this.handleOk}>
-            Submit
+          <Button key='submit' type='primary' loading={loading} onClick={this.handleOk}>
+            确定
           </Button>,
         ]}
       >
-        <p>Some contents...</p>
+        <p>请填写房间信息</p>
         <Form>
           <TextInput {...form.$('name').bind()} />
           <ImgUpload {...form.$('img').bind()} />
-          <SelectInput {...form.$('permission').bind()} />
+          <SelectInput {...form.$('permission').bind()} options={form.$('permission').extra} />
         </Form>
       </Modal>
     )

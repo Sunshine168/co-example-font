@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { List, Card, Layout, Menu, Breadcrumb, Icon } from 'antd'
-import { observable, action } from 'mobx'
-import { observer } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 
 import ImgCard from './component/img-card'
 import CreateModal, { createRoomForm } from './component/create-model'
+import AuditModal from './component/audit-model'
 
 const { SubMenu } = Menu
 const { Content, Sider } = Layout
@@ -85,23 +85,21 @@ const testData = [
   },
 ]
 
+@inject(stores => ({
+  showAuditModal: () => stores.workspace.setAuditModalVisible(true),
+  showCreateModal: () => stores.workspace.setCreateModalVisible(true),
+}))
 @observer
 export default class WorkspaceScreen extends Component {
-  @action.bound
-  setCreateModalVisible(visible) {
-    this.createModalVisible = visible
+  menuControl = (item) => {
+    const { showAuditModal, showCreateModal } = this.props
+    if (item.key === '4') {
+      showCreateModal(true)
+    }
+    if (item.key === '5') {
+      showAuditModal(true)
+    }
   }
-
-  @action.bound
-  setAuditModalVisible(visible) {
-    this.auditModalVisible = visible
-  }
-
-  @observable createModalVisible = false
-  @observable createModalLoading = false
-  @observable auditModalVisible = false
-  @observable auditModalLoading = false
-
   render() {
     return (
       <Layout
@@ -116,6 +114,7 @@ export default class WorkspaceScreen extends Component {
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
             style={{ height: '100%' }}
+            onClick={this.menuControl}
           >
             <SubMenu
               key='sub1'
@@ -137,8 +136,8 @@ export default class WorkspaceScreen extends Component {
                 </span>
               }
             >
-              <Menu.Item key='1'>创建一个新房间</Menu.Item>
-              <Menu.Item key='2'>审核</Menu.Item>
+              <Menu.Item key='4'>创建一个新房间</Menu.Item>
+              <Menu.Item key='5'>审核</Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -161,11 +160,8 @@ export default class WorkspaceScreen extends Component {
             )}
           />
         </Content>
-        <CreateModal
-          visible={this.createModalVisible}
-          form={createRoomForm}
-          setVisbile={this.setCreateModalVisible}
-        />
+        <CreateModal form={createRoomForm} />
+        <AuditModal />
       </Layout>
     )
   }
