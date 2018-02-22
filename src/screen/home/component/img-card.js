@@ -9,11 +9,12 @@ type ImgCardProps = {
   author: Object,
   title: string,
   description: string,
+  deleteAction(): void,
 }
 
 const ImgCard = (props: ImgCardProps) => {
   const {
-    img, author, title, description,
+    img, author, title, description, deleteAction,
   } = props
   return (
     <Card
@@ -24,7 +25,13 @@ const ImgCard = (props: ImgCardProps) => {
           src='https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
         />
       }
-      actions={[<Icon type='setting' />, <Icon type='edit' />, <Icon type='delete' />]}
+      actions={[
+        <Icon type='setting' />,
+        <Icon type='edit' />,
+        <span onClick={deleteAction}>
+          <Icon type='delete' />
+        </span>,
+      ]}
     >
       <Meta avatar={<Avatar src={author.avatar} />} title={title} description={description} />
     </Card>

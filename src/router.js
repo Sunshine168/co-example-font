@@ -57,7 +57,7 @@ class AppRouter extends React.Component<*> {
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <PrivateRouteWithState path='/' exact component={Home} />
-        <PrivateRouteWithState path='/workspace' exact component={Workspace} />
+        <PrivateRouteWithState path='/workspace/:roomNo' exact component={Workspace} />
       </Switch>
     )
   }

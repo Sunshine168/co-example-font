@@ -61,7 +61,9 @@ async function post(url, data) {
   const { resCode, message, data: resData } = res
   if (resCode === 500) {
     postErrorHandler(message)
-    err = null
+    return new Promise((resolve, reject) => {
+      return reject()
+    })
   } else if (resCode === 200) {
     err = null
   } else if (resCode === 401) {

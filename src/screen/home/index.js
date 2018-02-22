@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { List, Card, Layout, Menu, notification, Icon, Button } from 'antd'
+import { List, Card, Layout, Menu, notification, Icon, Button, Modal } from 'antd'
 import { inject, observer } from 'mobx-react'
 
 import ImgCard from './component/img-card'
@@ -10,6 +10,7 @@ import JoinModal, { joinRoomForm } from './component/join-modal'
 
 const { SubMenu } = Menu
 const { Content, Sider } = Layout
+const { confirm } = Modal
 
 @inject(stores => ({
   showAuditModal: () => stores.workspace.setAuditModalVisible(true),
@@ -17,6 +18,7 @@ const { Content, Sider } = Layout
   showJoinModal: () => stores.workspace.setJoinModalVisible(true),
   createRoom: stores.workspace.createRoom,
   joinRoom: stores.workspace.joinRoom,
+  deleteRoom: stores.workspace.deleteRoom,
   getAllRooms: stores.workspace.getAllRooms,
   roomsArray: stores.workspace.roomsArray,
 }))
@@ -47,7 +49,6 @@ export default class WorkspaceScreen extends Component {
     joinRoomForm.$hooks = {
       onSuccess: (form) => {
         this.props.joinRoom(form.values(), (result) => {
-          console.log(result.status)
           if (result.status === 1) {
             // 开放房间允许直接加入
             const key = `open${Date.now()}`
@@ -90,6 +91,30 @@ export default class WorkspaceScreen extends Component {
     if (item.key === '6') {
       showJoinModal(true)
     }
+  }
+
+  deleteRoom = (room) => {
+    const { deleteRoom, getAllRooms } = this.props
+    console.log('??')
+    confirm({
+      title: `是否要删除房间号为${room.roomNo}的房间`,
+      content: '房间删除后不可恢复！！',
+      onOk() {
+        return new Promise((resolve) => {
+          deleteRoom(
+            room.roomNo,
+            () => {
+              notification.success({
+                message: '删除成功',
+              })
+              getAllRooms()
+            },
+            resolve,
+          )
+        })
+      },
+      onCancel() {},
+    })
   }
 
   render() {
@@ -149,7 +174,7 @@ export default class WorkspaceScreen extends Component {
             dataSource={roomsArray}
             renderItem={(item) => {
               const {
- img, owner, name, roomNo,
+ img, owner, name, roomNo, isOwner,
 } = item
               return (
                 <List.Item>
@@ -157,7 +182,9 @@ export default class WorkspaceScreen extends Component {
                     img={img}
                     author={owner}
                     name={name}
-                    description={`房间号码为：${roomNo}`}
+                    description={`身份：${isOwner ? '拥有者' : '参与者'}`}
+                    title={`房间号码为：${roomNo}`}
+                    deleteAction={() => this.deleteRoom(item)}
                   />
                 </List.Item>
               )

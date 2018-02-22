@@ -55,6 +55,20 @@ class WorkSpace {
     }
   }
 
+  @action.bound
+  async deleteRoom(roomNo, sucCb, cb) {
+    try {
+      const result = await post(`/workspace/deleteRoom/${roomNo}`)
+      console.log(result)
+      sucCb(result)
+    } catch (e) {
+      //
+      console.log(e)
+    } finally {
+      cb()
+    }
+  }
+
   @computed
   get roomsArray() {
     return this.rooms.slice()

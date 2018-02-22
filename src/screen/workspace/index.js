@@ -10,9 +10,10 @@ const CustomContainer = styled.div`
 
 export default class Workspace extends Component {
   render() {
+    const { roomNo } = this.props.match.params
     return (
       <CustomContainer>
-        <Chat />
+        <Chat roomNo={roomNo} />
       </CustomContainer>
     )
   }
