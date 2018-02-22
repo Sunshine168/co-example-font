@@ -1,11 +1,19 @@
+// @flow
 import React from 'react'
 import { Card, Icon, Avatar } from 'antd'
 
 const { Meta } = Card
 
-const ImgCard = (props) => {
+type ImgCardProps = {
+  img: ?string,
+  author: Object,
+  title: string,
+  description: string,
+}
+
+const ImgCard = (props: ImgCardProps) => {
   const {
-    img, author, title, description, id,
+    img, author, title, description,
   } = props
   return (
     <Card

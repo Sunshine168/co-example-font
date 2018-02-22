@@ -51,6 +51,7 @@ class WorkSpace {
       sucCb(result)
     } catch (e) {
       //
+      console.log(e)
     }
   }
 

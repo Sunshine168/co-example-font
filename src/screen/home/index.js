@@ -47,6 +47,7 @@ export default class WorkspaceScreen extends Component {
     joinRoomForm.$hooks = {
       onSuccess: (form) => {
         this.props.joinRoom(form.values(), (result) => {
+          console.log(result.status)
           if (result.status === 1) {
             // 开放房间允许直接加入
             const key = `open${Date.now()}`
