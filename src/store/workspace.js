@@ -1,5 +1,5 @@
 /* @flow */
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import { post } from '../util/'
 
 class WorkSpace {
@@ -7,6 +7,8 @@ class WorkSpace {
   @observable createModalLoading = false
   @observable auditModalVisible = false
   @observable auditModalLoading = false
+  @observable joinModalVisible = false
+  @observable joinModalLoading = false
   @observable rooms = []
 
   @action.bound
@@ -20,15 +22,41 @@ class WorkSpace {
   }
 
   @action.bound
-  async getAllRooms() {
-    const result = await post('/workspace/info')
-    console.log(result)
+  setJoinModalVisible(visible) {
+    this.joinModalVisible = visible
   }
 
   @action.bound
-  async createRoom(room) {
-    const result = await post('/workspace/createRoom', room)
-    console.log(result)
+  async getAllRooms() {
+    try {
+      const result = await post('/workspace/info')
+      this.rooms = result.rooms
+    } catch (e) {}
+  }
+
+  @action.bound
+  async createRoom(room, sucCb) {
+    try {
+      const result = await post('/workspace/createRoom', room)
+      sucCb(result)
+    } catch (e) {
+      // err handle
+    }
+  }
+
+  @action.bound
+  async joinRoom(room, sucCb) {
+    try {
+      const result = await post('/workspace/joinRoom', room)
+      sucCb(result)
+    } catch (e) {
+      //
+    }
+  }
+
+  @computed
+  get roomsArray() {
+    return this.rooms.slice()
   }
 }
 

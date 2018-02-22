@@ -46,10 +46,11 @@ class User {
   async loginOut(sucCb) {
     try {
       await post('/signOut')
-      this.clearUser()
       sucCb()
     } catch (e) {
       //
+    } finally {
+      this.clearUser()
     }
   }
 

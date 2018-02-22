@@ -1,94 +1,24 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { List, Card, Layout, Menu, Breadcrumb, Icon } from 'antd'
+import { List, Card, Layout, Menu, notification, Icon, Button } from 'antd'
 import { inject, observer } from 'mobx-react'
 
 import ImgCard from './component/img-card'
 import CreateModal, { createRoomForm } from './component/create-modal'
 import AuditModal from './component/audit-modal'
+import JoinModal, { joinRoomForm } from './component/join-modal'
 
 const { SubMenu } = Menu
 const { Content, Sider } = Layout
 
-const testData = [
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-  {
-    key: 1,
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-    author: {
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    },
-    title: '123',
-    description: '455',
-  },
-]
-
 @inject(stores => ({
   showAuditModal: () => stores.workspace.setAuditModalVisible(true),
   showCreateModal: () => stores.workspace.setCreateModalVisible(true),
+  showJoinModal: () => stores.workspace.setJoinModalVisible(true),
   createRoom: stores.workspace.createRoom,
+  joinRoom: stores.workspace.joinRoom,
+  getAllRooms: stores.workspace.getAllRooms,
+  roomsArray: stores.workspace.roomsArray,
 }))
 @observer
 export default class WorkspaceScreen extends Component {
@@ -96,21 +26,73 @@ export default class WorkspaceScreen extends Component {
     super(props)
     createRoomForm.$hooks = {
       onSuccess: (form) => {
-        console.log(form.values())
-        this.props.createRoom(form.values(), () => {})
+        this.props.createRoom(form.values(), (result) => {
+          const { room } = result
+          const key = `open${Date.now()}`
+          const btn = (
+            <Button type='primary' size='small' onClick={() => notification.close(key)}>
+              点击进入房间
+            </Button>
+          )
+          notification.success({
+            title: '创建成功',
+            message: `创建的房号为${room}`,
+            btn,
+            onClose: () => {},
+          })
+        })
+      },
+    }
+
+    joinRoomForm.$hooks = {
+      onSuccess: (form) => {
+        this.props.joinRoom(form.values(), (result) => {
+          if (result.status === 1) {
+            // 开放房间允许直接加入
+            const key = `open${Date.now()}`
+            const btn = (
+              <Button type='primary' size='small' onClick={() => notification.close(key)}>
+                点击进入房间
+              </Button>
+            )
+            notification.success({
+              message: '加入房间成功',
+              btn,
+              onClose: () => {},
+            })
+          }
+          if (result.status === 0) {
+            // 待添加一个全局的消息模块
+            notification.success({
+              title: '申请已发送',
+              message: '等待房主审核',
+            })
+          }
+        })
       },
     }
   }
+
+  componentDidMount() {
+    const { getAllRooms } = this.props
+    getAllRooms()
+  }
+
   menuControl = (item) => {
-    const { showAuditModal, showCreateModal } = this.props
+    const { showAuditModal, showCreateModal, showJoinModal } = this.props
     if (item.key === '4') {
       showCreateModal(true)
     }
     if (item.key === '5') {
       showAuditModal(true)
     }
+    if (item.key === '6') {
+      showJoinModal(true)
+    }
   }
+
   render() {
+    const { roomsArray } = this.props
     return (
       <Layout
         style={{
@@ -147,14 +129,15 @@ export default class WorkspaceScreen extends Component {
               }
             >
               <Menu.Item key='4'>创建一个新房间</Menu.Item>
-              <Menu.Item key='5'>审核</Menu.Item>
+              <Menu.Item key='5'>审核我的房间</Menu.Item>
+              <Menu.Item key='6'>加入一个新房间</Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
         <Content style={{ padding: '0 24px', minHeight: 300 }}>
           <List
             grid={{
-              gutter: 16,
+              gutter: 8,
               xs: 1,
               sm: 2,
               md: 3,
@@ -162,16 +145,27 @@ export default class WorkspaceScreen extends Component {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={testData}
-            renderItem={item => (
-              <List.Item>
-                <ImgCard {...item} />
-              </List.Item>
-            )}
+            dataSource={roomsArray}
+            renderItem={(item) => {
+              const {
+ img, owner, name, roomNo,
+} = item
+              return (
+                <List.Item>
+                  <ImgCard
+                    img={img}
+                    author={owner}
+                    name={name}
+                    description={`房间号码为：${roomNo}`}
+                  />
+                </List.Item>
+              )
+            }}
           />
         </Content>
         <CreateModal form={createRoomForm} />
         <AuditModal />
+        <JoinModal form={joinRoomForm} />
       </Layout>
     )
   }

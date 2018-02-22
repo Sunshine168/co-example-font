@@ -3,45 +3,20 @@ import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { Modal, Button, Form } from 'antd'
 
-import TextInput, { SelectInput, ImgUpload } from '../../../component/input-component'
+import TextInput from '../../../component/input-component'
 import { MobxForm, validator } from '../../../util'
 
 const fields = [
   {
-    name: 'name',
-    placeholder: '请输入房间名',
-    label: '房间名',
+    name: 'roomNo',
+    placeholder: '请输入房间号',
+    label: '房间号',
     icon: 'codepen-circle',
-    rules: 'required|email|string',
-    size: 15,
-  },
-  {
-    name: 'img',
-    label: '初始化协作图片',
-    placeholder: '请上传初始协作图片',
-    rules: 'string|between:5,25',
-  },
-  {
-    name: 'permissions',
-    label: '房间权限',
-    placeholder: '请设置房间权限',
     rules: 'required|number',
-    default: true,
-    initial: '0',
-    extra: [
-      {
-        value: '0',
-        label: '公开房间',
-      },
-      {
-        value: '1',
-        label: '限制房间',
-      },
-    ],
   },
 ]
 
-type CreateModalProps = {
+type JoinModalProps = {
   visible: boolean,
   loading: boolean,
   setVisible(visible: boolean): void,
@@ -49,12 +24,12 @@ type CreateModalProps = {
 }
 
 @inject(stores => ({
-  visible: stores.workspace.createModalVisible,
-  loading: stores.workspace.createModalLoading,
-  setVisible: stores.workspace.setCreateModalVisible,
+  visible: stores.workspace.joinModalVisible,
+  loading: stores.workspace.joinModalLoading,
+  setVisible: stores.workspace.setJoinModalVisible,
 }))
 @observer
-export default class CreateModal extends Component<CreateModalProps> {
+export default class JoinModal extends Component<JoinModalProps> {
   handleOk = (e) => {
     const { setVisible, form } = this.props
     form.onSubmit(e)
@@ -85,13 +60,11 @@ export default class CreateModal extends Component<CreateModalProps> {
       >
         <p>请填写房间信息</p>
         <Form>
-          <TextInput {...form.$('name').bind()} />
-          <ImgUpload {...form.$('img').bind()} />
-          <SelectInput {...form.$('permissions').bind()} options={form.$('permissions').extra} />
+          <TextInput {...form.$('roomNo').bind()} />
         </Form>
       </Modal>
     )
   }
 }
 
-export const createRoomForm = new MobxForm({ fields }, { dvr: validator })
+export const joinRoomForm = new MobxForm({ fields }, { dvr: validator })
