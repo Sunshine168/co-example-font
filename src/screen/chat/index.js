@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Avatar, List, Input } from 'antd'
+import io from 'socket.io-client'
 
 import { Container } from '../../component/base-style-component'
 import { Bubble, ChatInput } from './component'
@@ -54,6 +55,45 @@ export default class Chat extends Component<*> {
   constructor(props) {
     super(props)
     this.renderChatItem = this.renderChatItem.bind(this)
+  }
+
+  componentDidMount() {
+    const { roomNo } = this.props
+    const socket = io(`${document.location.hostname}:7001`, {
+      query: {
+        room: roomNo,
+      },
+    })
+    this.socket = socket
+    const log = console.log
+    socket.on('connect', () => {
+      const id = socket.id
+
+      log('#connect,', id, socket)
+
+      // 接收在线用户信息
+      socket.on('online', (msg) => {
+        log('#online,', msg)
+      })
+
+      // 监听自身 id 以实现 p2p 通讯
+      socket.on(id, (msg) => {
+        log('#receive,', msg)
+      })
+
+      // 系统事件
+      socket.on('disconnect', (msg) => {
+        log('#disconnect', msg)
+      })
+
+      socket.on('disconnecting', () => {
+        log('#disconnecting')
+      })
+
+      socket.on('error', () => {
+        log('#error')
+      })
+    })
   }
 
   renderChatItem(rowData: Object, sectionID: number, rowID: number) {
