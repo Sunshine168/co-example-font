@@ -8,6 +8,7 @@ import { create } from 'mobx-persist'
 
 import Routes from './router'
 import stores, { history } from './store'
+import { emitter } from './util/'
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
@@ -41,7 +42,7 @@ export default class App extends Component {
   state = {
     loading: true,
   }
-  componentDidMount = async () => {
+  componentDidMount = () => {
     const hydrate = create()
     const result = hydrate('some', stores.user)
     const { rehydrate } = result
@@ -49,6 +50,11 @@ export default class App extends Component {
       this.setState({
         loading: false,
       })
+    })
+
+    emitter.on('USER_IS_INVALID', () => {
+      stores.user.loginOut(() => {})
+      stores.routing.push('/login')
     })
   }
 

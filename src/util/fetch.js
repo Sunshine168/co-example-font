@@ -65,7 +65,7 @@ async function post(url, data) {
   } else if (resCode === 200) {
     err = null
   } else if (resCode === 401) {
-    emitter.emit('NAVIGATION_NAVIGATE_TO', 'Login')
+    emitter.emit('USER_IS_INVALID')
     err = message
   } else if (resCode === 403) {
     // 请勿重复登录
