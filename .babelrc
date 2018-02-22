@@ -19,6 +19,7 @@
     "flow-runtime",
     "transform-decorators-legacy",
     "react-hot-loader/babel",
-    "babel-plugin-transform-react-jsx"
+    "babel-plugin-transform-react-jsx",
+    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
   ]
 }

@@ -1,7 +1,7 @@
 [ignore]
-.*/node_modules/*
 .*/config/*.*
 .*/script/*.js
+.*/node_modules/styled-components/.*
 [include]
 
 [libs]
