@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Avatar, List, Input } from 'antd'
 import io from 'socket.io-client'
+import { inject, observer } from 'mobx-react'
 
 import { Container } from '../../component/base-style-component'
 import { Bubble, ChatInput } from './component'
@@ -11,27 +12,27 @@ const { Item } = List
 const { TextArea } = Input
 
 const testData = [
-  {
-    id: 1,
-    type: 1,
-    msgFrom: 0,
-    context: '1231231231231231231231231231231231231231231231231231231231231231231231233123131312',
-    status: 'success',
-  },
-  {
-    id: 2,
-    type: 1,
-    msgFrom: 0,
-    context: '123',
-    status: 'success',
-  },
-  {
-    id: 3,
-    type: 1,
-    msgFrom: 0,
-    context: '123',
-    status: 'success',
-  },
+  // {
+  //   id: 1,
+  //   type: 1,
+  //   msgFrom: 0,
+  //   context: '1231231231231231231231231231231231231231231231231231231231231231231231233123131312',
+  //   status: 'success',
+  // },
+  // {
+  //   id: 2,
+  //   type: 1,
+  //   msgFrom: 0,
+  //   context: '123',
+  //   status: 'success',
+  // },
+  // {
+  //   id: 3,
+  //   type: 1,
+  //   msgFrom: 0,
+  //   context: '123',
+  //   status: 'success',
+  // },
 ]
 
 const UserListWrapper = styled.div`
@@ -50,7 +51,11 @@ const ChatingListWrapper = styled.div`
   height: 500px;
   border: 1px solid #cfcfcf;
 `
-
+@inject(stores => ({
+  user: stores.user,
+  chat: stores.chat,
+}))
+@observer
 export default class Chat extends Component<*> {
   constructor(props) {
     super(props)
@@ -58,22 +63,30 @@ export default class Chat extends Component<*> {
   }
 
   componentDidMount() {
-    const { roomNo } = this.props
+    const { roomNo, chat } = this.props
     const socket = io(`${document.location.hostname}:7001`, {
       query: {
         room: roomNo,
       },
+      transports: ['websocket'],
     })
     this.socket = socket
+    // debug
     const log = console.log
     socket.on('connect', () => {
-      const id = socket.id
+      const { id } = socket
 
       log('#connect,', id, socket)
 
       // 接收在线用户信息
       socket.on('online', (msg) => {
         log('#online,', msg)
+        const { users } = msg
+        chat.setChatingUserList(users)
+      })
+
+      socket.on(roomNo, (msg) => {
+        log('#receive room msg', msg)
       })
 
       // 监听自身 id 以实现 p2p 通讯
@@ -96,29 +109,43 @@ export default class Chat extends Component<*> {
     })
   }
 
+  sendGroupTextMsg = (text) => {
+    this.socket.emit('exchange', {
+      payload: {
+        type: 'text',
+        data: {
+          context: text,
+        },
+      },
+      target: `room_${this.props.roomNo}`,
+    })
+  }
+
   renderChatItem(rowData: Object, sectionID: number, rowID: number) {
-    const { context, msgFrom } = rowData
+    const { data, author } = rowData
+    const { user } = this.props
+    const { context } = data
     return (
       <Item>
-        <Bubble className={msgFrom === 1 ? 'right' : 'left'}>{context}</Bubble>
+        <Bubble className={author._id === user._id ? 'right' : 'left'}>{context}</Bubble>
       </Item>
     )
   }
+
   render() {
+    const { chat } = this.props
+    const { chatingUserList } = chat
     return (
       <Container>
         <UserListWrapper>
-          <Avatar icon='user' />
-          <Avatar>U</Avatar>
-          <Avatar>USER</Avatar>
-          <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-          <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>U</Avatar>
-          <Avatar style={{ backgroundColor: '#87d068' }} icon='user' />
+          {chatingUserList.map((user) => {
+            return <Avatar icon='user' key={user._id} />
+          })}
         </UserListWrapper>
         <ChatingListWrapper>
           <List itemLayout='vertical' dataSource={testData} renderItem={this.renderChatItem} />
         </ChatingListWrapper>
-        <ChatInput />
+        <ChatInput sendTextMsg={this.sendGroupTextMsg} />
       </Container>
     )
   }

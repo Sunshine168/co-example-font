@@ -93,8 +93,8 @@ export const Bubble = styled.div`
     transform: rotate(135deg);
   }
   &.right .content {
-    background: #b3e866;
-    border-color: #9ab96b;
+    background: #2db7f5;
+    border-color: #78d0f8;
     text-align: left;
   }
   &.right .content:before {
