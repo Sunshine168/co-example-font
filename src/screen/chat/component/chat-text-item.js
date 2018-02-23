@@ -5,7 +5,7 @@ const BubbleComponent = ({ children, bgColor, className }) => {
   return (
     <Bubble className={className}>
       <a className='avatar'>
-        <img src='http://res.jsrun.net/avatar/2464_1491377479769.png' />
+        <img src='http://orscxqn8h.bkt.clouddn.com/18-2-23/95583603.jpg' />
       </a>
       <div className='wrap'>
         <div className='content'>

@@ -8,16 +8,24 @@ const { TextArea } = Input
 
 const Control = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `
 
-const ChatInput = () => {
+const ChatInput = ({ sendTextMsg }) => {
   return (
     <div>
       {/* <Emoji emoji='santa' set='emojione' size={16} /> */}
       <Control>
         <TextArea />
-        <Button>发送</Button>
+        <Button
+          type='primary'
+          style={{ height: 52 }}
+          onClick={() => {
+            sendTextMsg(123)
+          }}
+        >
+          发送
+        </Button>
       </Control>
     </div>
   )
