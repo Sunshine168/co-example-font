@@ -96,6 +96,7 @@ export const Bubble = styled.div`
     background: #2db7f5;
     border-color: #78d0f8;
     text-align: left;
+    color: #f7f7f7;
   }
   &.right .content:before {
     right: -6px;

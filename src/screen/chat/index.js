@@ -1,7 +1,7 @@
 // @flow
-import React, { Component } from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
-import { Avatar, List } from 'antd'
+import { Avatar, List, notification, Tooltip } from 'antd'
 import io from 'socket.io-client'
 import { inject, observer } from 'mobx-react'
 
@@ -10,35 +10,12 @@ import { Bubble, ChatInput, msgForm } from './component'
 
 const { Item } = List
 
-const testData = [
-  // {
-  //   id: 1,
-  //   type: 1,
-  //   msgFrom: 0,
-  //   context: '1231231231231231231231231231231231231231231231231231231231231231231231233123131312',
-  //   status: 'success',
-  // },
-  // {
-  //   id: 2,
-  //   type: 1,
-  //   msgFrom: 0,
-  //   context: '123',
-  //   status: 'success',
-  // },
-  // {
-  //   id: 3,
-  //   type: 1,
-  //   msgFrom: 0,
-  //   context: '123',
-  //   status: 'success',
-  // },
-]
-
 const UserListWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
   padding: 20px 25px;
+  border: 1px solid #c8cacd;
 `
 
 const ChatingListWrapper = styled.div`
@@ -49,27 +26,46 @@ const ChatingListWrapper = styled.div`
   width: 400px;
   height: 500px;
   border: 1px solid #cfcfcf;
+  background: #fff;
 `
+
+const text = <span>prompt text</span>
+
+type ChatProps = {
+  user: Object,
+  chat: Object,
+}
+
 @inject(stores => ({
   user: stores.user,
   chat: stores.chat,
+  routing: stores.routing,
 }))
 @observer
-export default class Chat extends Component<*> {
-  constructor(props) {
+export default class Chat extends React.Component<ChatProps> {
+  constructor(props: ChatProps) {
     super(props)
     this.renderChatItem = this.renderChatItem.bind(this)
-    msgForm.$hooks = {
-      onSuccess: (form) => {
-        this.sendGroupTextMsg(form.values().msg)
-        form.$('msg').sync('')
-      },
+    msgForm.$hooks.onSuccess = (form) => {
+      this.sendGroupTextMsg(form.values().msg)
+      form.$('msg').sync('')
+    }
+    msgForm.$hooks.onError = () => {
+      notification.error({
+        message: '发送失败,消息不能为空',
+      })
     }
   }
 
   componentDidMount() {
-    const { roomNo, chat } = this.props
+    const { chat, roomNo, routing } = this.props
+    chat.checkRoomAlive(roomNo, this.loadSocket, () => {
+      routing.push('/')
+    })
+  }
 
+  loadSocket = () => {
+    const { roomNo, chat } = this.props
     // TODO 先确定房间存在是否再进行后面的步骤
     chat.initRoom(roomNo)
 
@@ -113,6 +109,7 @@ export default class Chat extends Component<*> {
 
       // 系统事件
       socket.on('disconnect', (msg) => {
+        // 中断和错误都强制离开房间
         log('#disconnect', msg)
       })
 
@@ -143,9 +140,13 @@ export default class Chat extends Component<*> {
     const { data, author } = rowData
     const { user } = this.props
     const { context } = data
+    console.log(author)
+    console.log(user.user._id)
     return (
       <Item>
-        <Bubble className={author._id === user._id ? 'right' : 'left'}>{context}</Bubble>
+        <Bubble className={author._id === user.user._id ? 'right' : 'left'} author={author}>
+          {context}
+        </Bubble>
       </Item>
     )
   }
@@ -154,25 +155,29 @@ export default class Chat extends Component<*> {
     const { chat, roomNo } = this.props
     const { chatingUserListMap, chatingListMap } = chat
     const chatingUserList = chatingUserListMap.get(roomNo) || []
-    const chatingList = chatingListMap.get(roomNo) || []
-    console.log('should render')
-    console.log(chat.chatingListMap.get(roomNo))
     return (
       <Container>
+        <div>
+          消息数：{chat.chatingListMap.has(roomNo) ? chat.chatingListMap.get(roomNo).length : 0}
+        </div>
         <UserListWrapper>
           {chatingUserList.map((user) => {
-            return <Avatar icon='user' key={user._id} />
+            return (
+              <Tooltip title={user.nickname} key={user._id}>
+                <Avatar icon='user' />
+              </Tooltip>
+            )
           })}
         </UserListWrapper>
         <ChatingListWrapper>
           <List
+            split={false}
             itemLayout='vertical'
             dataSource={chatingListMap.get(roomNo)}
             renderItem={this.renderChatItem}
           />
         </ChatingListWrapper>
         <ChatInput form={msgForm} />
-        <div>{chat.chatingListMap.has(roomNo) ? chat.chatingListMap.get(roomNo).length : 0}</div>
       </Container>
     )
   }

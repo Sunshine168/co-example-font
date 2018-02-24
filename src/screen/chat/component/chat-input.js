@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import { Input, Button } from 'antd'
 import styled from 'styled-components'
@@ -34,5 +35,5 @@ const ChatInput = ({ form }) => {
   )
 }
 
-export const msgForm = new MobxForm({ fields }, { dvr: validator })
+export const msgForm = new MobxForm({ fields }, { plugins: { dvr: validator } })
 export default observer(ChatInput)
