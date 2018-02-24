@@ -73,4 +73,4 @@ const Form = ({ form, pwdVisible, toRegister }: FormProps) => {
 export default inject(stores => ({
   pwdVisible: stores.user.pwdVisible,
 }))(observer(Form))
-export const loginInForm = new MobxForm({ fields }, { dvr: validator })
+export const loginInForm = new MobxForm({ fields }, { plugins: { dvr: validator } })

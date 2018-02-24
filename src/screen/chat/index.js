@@ -140,8 +140,6 @@ export default class Chat extends React.Component<ChatProps> {
     const { data, author } = rowData
     const { user } = this.props
     const { context } = data
-    console.log(author)
-    console.log(user.user._id)
     return (
       <Item>
         <Bubble className={author._id === user.user._id ? 'right' : 'left'} author={author}>

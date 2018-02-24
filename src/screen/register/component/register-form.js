@@ -62,6 +62,7 @@ const fields = [
 
 type FormProps = {
   form: Object,
+  toLogin(): void,
 }
 
 const Form = ({ form, toLogin }: FormProps) => {
@@ -95,4 +96,4 @@ const Form = ({ form, toLogin }: FormProps) => {
 }
 
 export default observer(Form)
-export const registerForm = new MobxForm({ fields }, { dvr: validator })
+export const registerForm = new MobxForm({ fields }, { plugins: { dvr: validator } })

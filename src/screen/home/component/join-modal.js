@@ -67,4 +67,4 @@ export default class JoinModal extends Component<JoinModalProps> {
   }
 }
 
-export const joinRoomForm = new MobxForm({ fields }, { dvr: validator })
+export const joinRoomForm = new MobxForm({ fields }, { plugins: { dvr: validator } })

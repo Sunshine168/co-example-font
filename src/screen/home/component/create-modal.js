@@ -94,4 +94,4 @@ export default class CreateModal extends Component<CreateModalProps> {
   }
 }
 
-export const createRoomForm = new MobxForm({ fields }, { dvr: validator })
+export const createRoomForm = new MobxForm({ fields }, { plugins: { dvr: validator } })
