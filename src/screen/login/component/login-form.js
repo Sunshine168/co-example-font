@@ -2,10 +2,9 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import { Button } from 'antd'
-
 import styled from 'styled-components'
-import { TextInput, EyeButton } from '../../../component'
 
+import { TextInput, EyeButton } from '../../../component'
 import { MobxForm, validator } from '../../../util'
 
 const FormContainer = styled.div`

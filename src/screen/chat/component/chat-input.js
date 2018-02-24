@@ -1,8 +1,10 @@
 import React from 'react'
-import { List, Input, Button } from 'antd'
+import { Input, Button } from 'antd'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 import { Emoji } from 'emoji-mart'
+
+import { MobxForm, validator } from '../../../util'
 
 const { TextArea } = Input
 
@@ -11,19 +13,20 @@ const Control = styled.div`
   flex-direction: row;
 `
 
-const ChatInput = ({ sendTextMsg }) => {
+const fields = [
+  {
+    name: 'msg',
+    rules: 'required|string',
+  },
+]
+
+const ChatInput = ({ form }) => {
   return (
     <div>
       {/* <Emoji emoji='santa' set='emojione' size={16} /> */}
       <Control>
-        <TextArea />
-        <Button
-          type='primary'
-          style={{ height: 52 }}
-          onClick={() => {
-            sendTextMsg(123)
-          }}
-        >
+        <TextArea {...form.$('msg').bind()} />
+        <Button type='primary' style={{ height: 52 }} onClick={form.onSubmit}>
           发送
         </Button>
       </Control>
@@ -31,4 +34,5 @@ const ChatInput = ({ sendTextMsg }) => {
   )
 }
 
+export const msgForm = new MobxForm({ fields }, { dvr: validator })
 export default observer(ChatInput)

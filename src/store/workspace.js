@@ -59,7 +59,6 @@ class WorkSpace {
   async deleteRoom(roomNo, sucCb, cb) {
     try {
       const result = await post(`/workspace/deleteRoom/${roomNo}`)
-      console.log(result)
       sucCb(result)
     } catch (e) {
       //

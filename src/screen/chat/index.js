@@ -1,15 +1,14 @@
 // @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Avatar, List, Input } from 'antd'
+import { Avatar, List } from 'antd'
 import io from 'socket.io-client'
 import { inject, observer } from 'mobx-react'
 
 import { Container } from '../../component/base-style-component'
-import { Bubble, ChatInput } from './component'
+import { Bubble, ChatInput, msgForm } from './component'
 
 const { Item } = List
-const { TextArea } = Input
 
 const testData = [
   // {
@@ -60,10 +59,20 @@ export default class Chat extends Component<*> {
   constructor(props) {
     super(props)
     this.renderChatItem = this.renderChatItem.bind(this)
+    msgForm.$hooks = {
+      onSuccess: (form) => {
+        this.sendGroupTextMsg(form.values().msg)
+        form.$('msg').sync('')
+      },
+    }
   }
 
   componentDidMount() {
     const { roomNo, chat } = this.props
+
+    // TODO 先确定房间存在是否再进行后面的步骤
+    chat.initRoom(roomNo)
+
     const socket = io(`${document.location.hostname}:7001`, {
       query: {
         room: roomNo,
@@ -72,7 +81,7 @@ export default class Chat extends Component<*> {
     })
     this.socket = socket
     // debug
-    const log = console.log
+    const { log } = console
     socket.on('connect', () => {
       const { id } = socket
 
@@ -82,10 +91,18 @@ export default class Chat extends Component<*> {
       socket.on('online', (msg) => {
         log('#online,', msg)
         const { users } = msg
-        chat.setChatingUserList(users)
+        chat.setChatingUserList(roomNo, users)
       })
 
       socket.on(roomNo, (msg) => {
+        const { chat } = this.props
+        const { data } = msg
+        const { payload } = data
+        if (payload.type === 'text') {
+          log('#receive room text info', msg)
+          chat.addChatingRecord(roomNo, payload)
+        }
+
         log('#receive room msg', msg)
       })
 
@@ -109,13 +126,14 @@ export default class Chat extends Component<*> {
     })
   }
 
-  sendGroupTextMsg = (text) => {
+  sendGroupTextMsg = (text: string) => {
     this.socket.emit('exchange', {
       payload: {
-        type: 'text',
         data: {
           context: text,
         },
+        type: 'text',
+        author: this.props.user.user,
       },
       target: `room_${this.props.roomNo}`,
     })
@@ -133,8 +151,12 @@ export default class Chat extends Component<*> {
   }
 
   render() {
-    const { chat } = this.props
-    const { chatingUserList } = chat
+    const { chat, roomNo } = this.props
+    const { chatingUserListMap, chatingListMap } = chat
+    const chatingUserList = chatingUserListMap.get(roomNo) || []
+    const chatingList = chatingListMap.get(roomNo) || []
+    console.log('should render')
+    console.log(chat.chatingListMap.get(roomNo))
     return (
       <Container>
         <UserListWrapper>
@@ -143,9 +165,14 @@ export default class Chat extends Component<*> {
           })}
         </UserListWrapper>
         <ChatingListWrapper>
-          <List itemLayout='vertical' dataSource={testData} renderItem={this.renderChatItem} />
+          <List
+            itemLayout='vertical'
+            dataSource={chatingListMap.get(roomNo)}
+            renderItem={this.renderChatItem}
+          />
         </ChatingListWrapper>
-        <ChatInput sendTextMsg={this.sendGroupTextMsg} />
+        <ChatInput form={msgForm} />
+        <div>{chat.chatingListMap.has(roomNo) ? chat.chatingListMap.get(roomNo).length : 0}</div>
       </Container>
     )
   }

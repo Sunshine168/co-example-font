@@ -2,17 +2,34 @@
 import { observable, action } from 'mobx'
 
 class Chat {
-  @observable chatingList: Array<Object> = []
-  @observable chatingUserList: Array<Object> = []
+  @observable chatingListMap: Map<string, Array<Object>> = new Map()
+  @observable chatingUserListMap: Map<string, Array<Object>> = new Map()
 
   @action.bound
-  addChatingRecord(record: Object) {
-    this.chatingList.push(record)
+  initRoom(roomNo: string) {
+    console.log(roomNo)
+    this.chatingListMap.set(roomNo, [])
+    this.chatingUserListMap.set(roomNo, [])
   }
 
   @action.bound
-  setChatingUserList(userList: Array<Object>) {
-    this.chatingUserList = userList
+  checkRoom(roomNo: string) {
+    if (!this.chatingListMap.has(roomNo)) {
+      this.initRoom(roomNo)
+    }
+  }
+
+  @action.bound
+  addChatingRecord(roomNo: string, record: Object) {
+    this.checkRoom(roomNo)
+    const chatingArray = this.chatingListMap.get(roomNo)
+    chatingArray.push(record)
+  }
+
+  @action.bound
+  setChatingUserList(roomNo: string, userList: Array<Object>) {
+    this.checkRoom(roomNo)
+    this.chatingUserListMap.set(roomNo, userList)
   }
 }
 
