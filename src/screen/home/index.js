@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { List, Card, Layout, Menu, notification, Icon, Button, Modal, Breadcrumb } from 'antd'
+import { List, Layout, Menu, notification, Icon, Button, Modal, Breadcrumb } from 'antd'
 import { inject, observer } from 'mobx-react'
 
 import ImgCard from './component/img-card'
@@ -14,14 +14,24 @@ const { SubMenu } = Menu
 const { Content, Sider } = Layout
 const { confirm } = Modal
 
-type WorkspaceScreenProps = {}
-
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `
+
+type WorkspaceScreenProps = {
+  showAuditModal(): void,
+  showCreateModal(): void,
+  showJoinModal(): void,
+  createRoom(room: Object, sucCb: (Object) => void): void,
+  joinRoom(room: Object, sucCb: (Object) => void): void,
+  deleteRoom(roomNo: string | number, sucCb: (Object) => void): void,
+  getAllRooms(): void,
+  roomsArray: Array<Object>,
+  history: Object,
+}
 
 @inject(stores => ({
   showAuditModal: () => stores.workspace.setAuditModalVisible(true),
@@ -92,7 +102,7 @@ export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
     getAllRooms()
   }
 
-  menuControl = (item) => {
+  menuControl = (item: Object) => {
     const { showAuditModal, showCreateModal, showJoinModal } = this.props
     if (item.key === '4') {
       showCreateModal(true)
@@ -105,7 +115,12 @@ export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
     }
   }
 
-  deleteRoom = (room) => {
+  enterRoom = (roomNo: string | number) => {
+    const { history } = this.props
+    history.push(`/workspace/${roomNo}`)
+  }
+
+  deleteRoom = (room: Object) => {
     const { deleteRoom, getAllRooms } = this.props
     confirm({
       title: `是否要删除房间号为${room.roomNo}的房间`,
@@ -204,6 +219,7 @@ export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
                       name={name}
                       description={`身份：${isOwner ? '拥有者' : '参与者'}`}
                       title={`房间号码为：${roomNo}`}
+                      enterAction={() => this.enterRoom(roomNo)}
                       deleteAction={() => this.deleteRoom(item)}
                     />
                   </List.Item>

@@ -10,11 +10,12 @@ type ImgCardProps = {
   title: string,
   description: string,
   deleteAction(): void,
+  enterAction(): void,
 }
 
 const ImgCard = (props: ImgCardProps) => {
   const {
-    img, author, title, description, deleteAction,
+    img, author, title, description, deleteAction, enterAction,
   } = props
   return (
     <Card
@@ -27,7 +28,9 @@ const ImgCard = (props: ImgCardProps) => {
       }
       actions={[
         <Icon type='setting' />,
-        <Icon type='edit' />,
+        <span onClick={enterAction}>
+          <Icon type='edit' />
+        </span>,
         <span onClick={deleteAction}>
           <Icon type='delete' />
         </span>,
