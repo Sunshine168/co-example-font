@@ -23,16 +23,19 @@ export const Logo = styled.h3`
   font-size: 32px;
 `
 
-@withRedirect('/')
-@inject(['user'])
+@inject(stores => ({
+  login: stores.user.login,
+  isLogin: stores.user.isLogin,
+}))
 @observer
+@withRedirect('/')
 export default class Login extends Component<Props> {
   constructor(props: Props) {
     super(props)
     loginInForm.$hooks = {
       onSuccess: (form) => {
-        const { user } = this.props
-        user.login(form.values(), () => {
+        const { login } = this.props
+        login(form.values(), () => {
           const { history } = this.props
           notification.success({ message: '登录成功' })
           history.push('/')
@@ -43,7 +46,9 @@ export default class Login extends Component<Props> {
       },
     }
   }
+
   render() {
+    console.log(`inner render ${+new Date()}`)
     const { history } = this.props
     return (
       <Container>

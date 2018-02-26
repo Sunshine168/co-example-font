@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import { Button } from 'antd'
 import styled from 'styled-components'
 
@@ -65,7 +65,7 @@ type FormProps = {
   toLogin(): void,
 }
 
-const Form = ({ form, toLogin }: FormProps) => {
+const Form = ({ form, toLogin, pwdVisible }: FormProps) => {
   return (
     <form onSubmit={form.onSubmit}>
       <FormContainer>
@@ -73,13 +73,19 @@ const Form = ({ form, toLogin }: FormProps) => {
           if (field.name === 'avatar') {
             return null
           }
-          return (
-            <TextInput
-              {...form.$(field.name).bind()}
-              addonAfter={field.name === 'password' ? <EyeButton /> : null}
-              key={field.name}
-            />
-          )
+
+          if (field.name === 'password') {
+            return (
+              <TextInput
+                key={field.name}
+                {...form.$('password').bind()}
+                addonAfter={<EyeButton />}
+                type={pwdVisible ? 'text' : 'password'}
+              />
+            )
+          }
+
+          return <TextInput {...form.$(field.name).bind()} key={field.name} />
         })}
         <ImgUpload {...form.$('avatar').bind()} />
         <ButtonGroup>
@@ -95,5 +101,7 @@ const Form = ({ form, toLogin }: FormProps) => {
   )
 }
 
-export default observer(Form)
+export default inject(stores => ({
+  pwdVisible: stores.user.pwdVisible,
+}))(observer(Form))
 export const registerForm = new MobxForm({ fields }, { plugins: { dvr: validator } })

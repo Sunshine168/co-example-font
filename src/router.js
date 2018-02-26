@@ -28,9 +28,9 @@ const PrivateRoute = ({
       {...rest}
       render={props =>
         (isLogin ? (
-          <Component {...props} />
+          <Component {...rest} />
         ) : CustomComponent ? (
-          <CustomComponent {...props} />
+          <CustomComponent {...rest} />
         ) : (
           <Redirect
             to={{
