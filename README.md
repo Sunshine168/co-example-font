@@ -1,6 +1,6 @@
-# mobx-react-quick-starter
+# simple co room
 
-mobx+react+react-routerv4+styled-components+flow 
+mobx+react+react-routerv4+socket.io+styled-components+flow 
  
 Features:
  * hmr support
@@ -9,6 +9,14 @@ Features:
  * styled-components and antd-mobile for css
  * devtools
  
+ RoadMap
+ * co-image
+ * co-exl
+ * mobx with rx
+ * clean up code
+ * test cover
+
+
 ## project structure
 
 ```
