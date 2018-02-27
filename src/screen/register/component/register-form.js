@@ -63,6 +63,7 @@ const fields = [
 type FormProps = {
   form: Object,
   toLogin(): void,
+  pwdVisible: boolean,
 }
 
 const Form = ({ form, toLogin, pwdVisible }: FormProps) => {

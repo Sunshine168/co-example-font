@@ -7,6 +7,7 @@ import Form, { registerForm } from './component/register-form'
 
 type Props = {
   history: Object,
+  user: Object,
 }
 
 @inject(['user'])
@@ -17,13 +18,16 @@ export default class RegisterScreen extends Component<Props> {
     this.form = registerForm
     this.form.$hooks = {
       onSuccess: (form) => {
-        const { register } = this.props.user
-        register(form.values(), (result) => {
-          const { history } = this.props
-          notification.success({
-            message: '注册成功',
+        return new Promise((resolve) => {
+          const { register } = this.props.user
+          register(form.values(), () => {
+            const { history } = this.props
+            resolve()
+            notification.success({
+              message: '注册成功',
+            })
+            history.push('/login')
           })
-          history.push('/login')
         })
       },
       onError: () => {},
