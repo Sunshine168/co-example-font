@@ -11,12 +11,13 @@ type ImgCardProps = {
   title: string,
   description: string,
   deleteAction(): void,
-  enterAction(): void,
+  settingAction(): void,
+  roomNo: string,
 }
 
 const ImgCard = (props: ImgCardProps) => {
   const {
-    roomNo, img, author, title, description, deleteAction, enterAction,
+    roomNo, img, author, title, description, deleteAction, settingAction, isOwner,
   } = props
   return (
     <Card
@@ -28,12 +29,14 @@ const ImgCard = (props: ImgCardProps) => {
         />
       }
       actions={[
-        <Icon type='setting' />,
+        <span onClick={settingAction}>
+          <Icon type='setting' />
+        </span>,
         <Link to={`/workspace/${roomNo}`}>
           <Icon type='edit' />
         </Link>,
         <span onClick={deleteAction}>
-          <Icon type='delete' />
+          <Icon type={`${isOwner ? 'delete' : 'close'}`} />
         </span>,
       ]}
     >

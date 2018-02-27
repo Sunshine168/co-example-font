@@ -25,7 +25,7 @@ const fields = [
     name: 'permissions',
     label: '房间权限',
     placeholder: '请设置房间权限',
-    rules: 'required|number',
+    rules: 'required',
     default: true,
     initial: '0',
     extra: [

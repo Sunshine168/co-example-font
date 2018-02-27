@@ -26,12 +26,13 @@ type HomeScreenProps = {
   showJoinModal(): void,
   showCreateModal(): void,
   showAuditModal(roomNo: string): void,
-  createRoom(room: Object, sucCb: (Object) => void): void,
-  joinRoom(room: Object, sucCb: (Object) => void): void,
-  deleteRoom(roomNo: string | number, sucCb: (Object) => void): void,
-  getAllRooms(): void,
+  createRoom(room: Object, sucCb: (Object) => void): Promise<*>,
+  joinRoom(room: Object, sucCb: (Object) => void): Promise<*>,
+  deleteRoom(roomNo: string | number, sucCb: (Object) => void): Promise<*>,
+  quitRoom(roomNo: string | number, sucCb: (Object) => void): Promise<*>,
+  getAllRooms(): Promise<*>,
+  getPartnerInfo(): Promise<*>,
   roomsArray: Array<Object>,
-  history: Object,
 }
 
 @inject(stores => ({
@@ -42,6 +43,7 @@ type HomeScreenProps = {
   joinRoom: stores.workspace.joinRoom,
   deleteRoom: stores.workspace.deleteRoom,
   getAllRooms: stores.workspace.getAllRooms,
+  quitRoom: stores.workspace.quitRoom,
   roomsArray: stores.workspace.roomsArray,
   routing: stores.routing,
   getPartnerInfo: stores.workspace.getPartnerInfo,
@@ -76,6 +78,7 @@ export default class HomeScreen extends Component<HomeScreenProps> {
     joinRoomForm.$hooks = {
       onSuccess: (form) => {
         this.props.joinRoom(form.values(), (result) => {
+          this.props.getAllRooms()
           if (result.status === 1) {
             // 开放房间允许直接加入
             const key = `open${Date.now()}`
@@ -129,6 +132,29 @@ export default class HomeScreen extends Component<HomeScreenProps> {
             () => {
               notification.success({
                 message: '删除成功',
+              })
+              getAllRooms()
+            },
+            resolve,
+          )
+        })
+      },
+      onCancel() {},
+    })
+  }
+
+  quitRoom = (room: Object) => {
+    const { quitRoom, getAllRooms } = this.props
+    confirm({
+      title: `是否要退出房间号为${room.roomNo}的房间`,
+      content: '请谨慎操作',
+      onOk() {
+        return new Promise((resolve) => {
+          quitRoom(
+            room.roomNo,
+            () => {
+              notification.success({
+                message: '退出成功',
               })
               getAllRooms()
             },
@@ -211,13 +237,20 @@ export default class HomeScreen extends Component<HomeScreenProps> {
                 return (
                   <List.Item>
                     <ImgCard
+                      isOwner={isOwner}
                       roomNo={roomNo}
                       img={img}
                       author={owner}
                       name={name}
                       description={`身份：${isOwner ? '拥有者' : '参与者'}`}
                       title={`房间号码为：${roomNo}`}
-                      deleteAction={() => this.deleteRoom(item)}
+                      deleteAction={() => {
+                        if (isOwner) {
+                          this.deleteRoom(item)
+                        } else {
+                          this.quitRoom(item)
+                        }
+                      }}
                       settingAction={() => {
                         this.props.showAuditModal(roomNo)
                         this.props.getPartnerInfo()

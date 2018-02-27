@@ -5,21 +5,6 @@ import { Modal, Button, Table } from 'antd'
 
 const { Column } = Table
 
-const data = []
-
-const mockData = (count) => {
-  for (let i = 0; i < count; i++) {
-    data.push({
-      account: `${i}`,
-      nickname: `${i}`,
-      status: 0,
-      key: `${i}`,
-    })
-  }
-}
-
-mockData(5)
-
 type AuditModalProps = {
   visible: boolean,
   setVisible(visible: boolean): void,
@@ -30,7 +15,7 @@ type AuditModalProps = {
   visible: stores.workspace.auditModalVisible,
   setVisible: stores.workspace.setAuditModalVisible,
   getPartnerInfo: stores.workspace.getPartnerInfo,
-  isLoading: stores.workspace.isLoadingCheckRoomInfo,
+  partnersArray: stores.workspace.partnersArray,
 }))
 @observer
 export default class AuditModal extends Component<AuditModalProps> {
@@ -45,7 +30,7 @@ export default class AuditModal extends Component<AuditModalProps> {
   }
 
   render() {
-    const { visible } = this.props
+    const { visible, partnersArray } = this.props
     return (
       <Modal
         visible={visible}
@@ -61,21 +46,26 @@ export default class AuditModal extends Component<AuditModalProps> {
           </Button>,
         ]}
       >
-        <Table dataSource={data} pagination={false} bordered>
+        <Table dataSource={partnersArray} pagination={false} bordered>
           <Column title='账号名' dataIndex='account' key='account' />
-          <Column title='用户昵称' dataIndex='ninckname' key='nickname' />
+          <Column title='用户昵称' dataIndex='nickname' key='nickname' />
           <Column
             className='center_column'
             title='操作'
             key='action'
-            render={(text, record) => (
-              <div>
-                <Button type='primary' style={{ marginRight: 15 }}>
-                  允许
-                </Button>
-                <Button type='danger'>拒绝</Button>
-              </div>
-            )}
+            render={(text, record) => {
+              if (record.stauts === 0) {
+                return (
+                  <div>
+                    <Button type='primary' style={{ marginRight: 15 }}>
+                      允许
+                    </Button>
+                    <Button type='danger'>拒绝</Button>
+                  </div>
+                )
+              }
+              return null
+            }}
           />
         </Table>
       </Modal>

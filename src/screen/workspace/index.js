@@ -18,7 +18,11 @@ const Row = styled.div`
   align-items: center;
 `
 
-export default class Workspace extends Component {
+type WorkSpaceProps = {
+  computedMatch: Object,
+}
+
+export default class Workspace extends Component<WorkSpaceProps> {
   render() {
     const { roomNo } = this.props.computedMatch.params
     return (

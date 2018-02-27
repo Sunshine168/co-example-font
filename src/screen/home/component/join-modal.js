@@ -12,7 +12,7 @@ const fields = [
     placeholder: '请输入房间号',
     label: '房间号',
     icon: 'codepen-circle',
-    rules: 'required|number',
+    rules: 'required',
   },
 ]
 
@@ -30,6 +30,8 @@ type JoinModalProps = {
 }))
 @observer
 export default class JoinModal extends Component<JoinModalProps> {
+  componentDidMount() {}
+
   handleOk = (e) => {
     const { setVisible, form } = this.props
     form.onSubmit(e)

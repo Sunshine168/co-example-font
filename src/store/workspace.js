@@ -9,7 +9,11 @@ class WorkSpace {
   @observable auditModalLoading = false
   @observable joinModalVisible = false
   @observable joinModalLoading = false
+  @observable checkingRoomNo
   @observable rooms = []
+  @observable isLoadingCheckRoomInfo = false
+  @observable isInitingHome = false
+  @observable partnerInfo = []
 
   @action.bound
   setCreateModalVisible(visible) {
@@ -17,8 +21,9 @@ class WorkSpace {
   }
 
   @action.bound
-  setAuditModalVisible(visible) {
+  setAuditModalVisible(visible, roomNo) {
     this.auditModalVisible = visible
+    this.checkingRoomNo = roomNo
   }
 
   @action.bound
@@ -68,9 +73,47 @@ class WorkSpace {
     }
   }
 
+  @action.bound
+  async getPartnerInfo() {
+    this.isLoadingCheckRoomInfo = true
+    try {
+      const { result } = await post(`/workspace/${this.checkingRoomNo}/partners`)
+      console.log(result)
+      this.partnerInfo = result
+    } catch (e) {
+      //
+    } finally {
+      this.isLoadingCheckRoomInfo = false
+    }
+  }
+
+  @action.bound
+  async quitRoom(roomNo, sucCb, cb) {
+    console.log('quit?')
+    try {
+      const result = await post(`/workspace/${roomNo}/quitRoom`)
+      sucCb(result)
+    } catch (e) {
+      //
+      console.log(e)
+    } finally {
+      cb()
+    }
+  }
+
   @computed
   get roomsArray() {
     return this.rooms.slice()
+  }
+
+  @computed
+  get partnersArray() {
+    return this.partnerInfo.slice()
+  }
+
+  @computed
+  get homeScreenLoading() {
+    return this.isInitingHome || this.isLoadingCheckRoomInfo ? true : false
   }
 }
 
