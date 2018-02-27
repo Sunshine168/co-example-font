@@ -22,12 +22,13 @@ class User {
   @action.bound
   async login(user, sucCb, errCb) {
     this.loginIning = true
-    const result: Object = await post('/signIn', user)
-    if (result) {
+
+    try {
+      const result: Object = await post('/signIn', user)
       this.setUser(result)
       this.loginIning = false
       sucCb(result)
-    } else {
+    } catch (e) {
       errCb()
     }
   }
