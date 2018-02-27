@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { Card, Icon, Avatar } from 'antd'
+import { Link } from 'react-router-dom'
 
 const { Meta } = Card
 
@@ -15,7 +16,7 @@ type ImgCardProps = {
 
 const ImgCard = (props: ImgCardProps) => {
   const {
-    img, author, title, description, deleteAction, enterAction,
+    roomNo, img, author, title, description, deleteAction, enterAction,
   } = props
   return (
     <Card
@@ -28,9 +29,9 @@ const ImgCard = (props: ImgCardProps) => {
       }
       actions={[
         <Icon type='setting' />,
-        <span onClick={enterAction}>
+        <Link to={`/workspace/${roomNo}`}>
           <Icon type='edit' />
-        </span>,
+        </Link>,
         <span onClick={deleteAction}>
           <Icon type='delete' />
         </span>,

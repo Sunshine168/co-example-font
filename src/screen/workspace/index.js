@@ -20,7 +20,7 @@ const Row = styled.div`
 
 export default class Workspace extends Component {
   render() {
-    const { roomNo } = this.props.match.params
+    const { roomNo } = this.props.computedMatch.params
     return (
       <div>
         <Row>

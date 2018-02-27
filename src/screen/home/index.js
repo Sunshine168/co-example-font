@@ -21,7 +21,7 @@ const Row = styled.div`
   align-items: center;
 `
 
-type WorkspaceScreenProps = {
+type HomeScreenProps = {
   showAuditModal(): void,
   showCreateModal(): void,
   showJoinModal(): void,
@@ -42,10 +42,11 @@ type WorkspaceScreenProps = {
   deleteRoom: stores.workspace.deleteRoom,
   getAllRooms: stores.workspace.getAllRooms,
   roomsArray: stores.workspace.roomsArray,
+  routing: stores.routing,
 }))
 @observer
-export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
-  constructor(props: WorkspaceScreenProps) {
+export default class HomeScreen extends Component<HomeScreenProps> {
+  constructor(props: HomeScreenProps) {
     super(props)
     createRoomForm.$hooks = {
       onSuccess: (form) => {
@@ -115,10 +116,10 @@ export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
     }
   }
 
-  enterRoom = (roomNo: string | number) => {
-    const { history } = this.props
-    history.push(`/workspace/${roomNo}`)
-  }
+  // enterRoom = (roomNo: string | number) => {
+  //   const { routing } = this.props
+  //   routing.push(`/workspace/${roomNo}`)
+  // }
 
   deleteRoom = (room: Object) => {
     const { deleteRoom, getAllRooms } = this.props
@@ -144,6 +145,7 @@ export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
   }
 
   render() {
+    console.log(this.props.history)
     const { roomsArray } = this.props
     return (
       <div>
@@ -214,12 +216,12 @@ export default class WorkspaceScreen extends Component<WorkspaceScreenProps> {
                 return (
                   <List.Item>
                     <ImgCard
+                      roomNo={roomNo}
                       img={img}
                       author={owner}
                       name={name}
                       description={`身份：${isOwner ? '拥有者' : '参与者'}`}
                       title={`房间号码为：${roomNo}`}
-                      enterAction={() => this.enterRoom(roomNo)}
                       deleteAction={() => this.deleteRoom(item)}
                     />
                   </List.Item>

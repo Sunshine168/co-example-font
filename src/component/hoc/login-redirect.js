@@ -18,7 +18,6 @@ export default function withRedirect(path: ?string, customRedirect: ?() => boole
         if (typeof customRedirect === 'function') {
           return customRedirect()
         }
-        console.log(this.props.isLogin)
         if (this.props.isLogin) {
           return true
         }
