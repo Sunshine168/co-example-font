@@ -22,14 +22,15 @@ mockData(5)
 
 type AuditModalProps = {
   visible: boolean,
-  loading: boolean,
   setVisible(visible: boolean): void,
+  getPartnerInfo(): void,
 }
 
 @inject(stores => ({
   visible: stores.workspace.auditModalVisible,
-  loading: stores.workspace.auditModalLoading,
   setVisible: stores.workspace.setAuditModalVisible,
+  getPartnerInfo: stores.workspace.getPartnerInfo,
+  isLoading: stores.workspace.isLoadingCheckRoomInfo,
 }))
 @observer
 export default class AuditModal extends Component<AuditModalProps> {
@@ -44,7 +45,7 @@ export default class AuditModal extends Component<AuditModalProps> {
   }
 
   render() {
-    const { visible, loading } = this.props
+    const { visible } = this.props
     return (
       <Modal
         visible={visible}
@@ -55,7 +56,7 @@ export default class AuditModal extends Component<AuditModalProps> {
           <Button key='back' onClick={this.handleCancel}>
             取消
           </Button>,
-          <Button key='submit' type='primary' loading={loading} onClick={this.handleOk}>
+          <Button key='submit' type='primary' onClick={this.handleOk}>
             确定
           </Button>,
         ]}

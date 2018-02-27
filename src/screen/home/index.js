@@ -9,6 +9,7 @@ import CreateModal, { createRoomForm } from './component/create-modal'
 import AuditModal from './component/audit-modal'
 import JoinModal, { joinRoomForm } from './component/join-modal'
 import { UserStauts } from '../../component/'
+import { AutoSwitchLoading } from '../../component/hoc'
 
 const { SubMenu } = Menu
 const { Content, Sider } = Layout
@@ -22,9 +23,9 @@ const Row = styled.div`
 `
 
 type HomeScreenProps = {
-  showAuditModal(): void,
-  showCreateModal(): void,
   showJoinModal(): void,
+  showCreateModal(): void,
+  showAuditModal(roomNo: string): void,
   createRoom(room: Object, sucCb: (Object) => void): void,
   joinRoom(room: Object, sucCb: (Object) => void): void,
   deleteRoom(roomNo: string | number, sucCb: (Object) => void): void,
@@ -34,17 +35,20 @@ type HomeScreenProps = {
 }
 
 @inject(stores => ({
-  showAuditModal: () => stores.workspace.setAuditModalVisible(true),
-  showCreateModal: () => stores.workspace.setCreateModalVisible(true),
   showJoinModal: () => stores.workspace.setJoinModalVisible(true),
+  showCreateModal: () => stores.workspace.setCreateModalVisible(true),
+  showAuditModal: (roomNo: string) => stores.workspace.setAuditModalVisible(true, roomNo),
   createRoom: stores.workspace.createRoom,
   joinRoom: stores.workspace.joinRoom,
   deleteRoom: stores.workspace.deleteRoom,
   getAllRooms: stores.workspace.getAllRooms,
   roomsArray: stores.workspace.roomsArray,
   routing: stores.routing,
+  getPartnerInfo: stores.workspace.getPartnerInfo,
+  isLoading: stores.workspace.homeScreenLoading,
 }))
 @observer
+@AutoSwitchLoading
 export default class HomeScreen extends Component<HomeScreenProps> {
   constructor(props: HomeScreenProps) {
     super(props)
@@ -104,22 +108,14 @@ export default class HomeScreen extends Component<HomeScreenProps> {
   }
 
   menuControl = (item: Object) => {
-    const { showAuditModal, showCreateModal, showJoinModal } = this.props
+    const { showJoinModal, showCreateModal } = this.props
     if (item.key === '4') {
       showCreateModal(true)
-    }
-    if (item.key === '5') {
-      showAuditModal(true)
     }
     if (item.key === '6') {
       showJoinModal(true)
     }
   }
-
-  // enterRoom = (roomNo: string | number) => {
-  //   const { routing } = this.props
-  //   routing.push(`/workspace/${roomNo}`)
-  // }
 
   deleteRoom = (room: Object) => {
     const { deleteRoom, getAllRooms } = this.props
@@ -145,7 +141,6 @@ export default class HomeScreen extends Component<HomeScreenProps> {
   }
 
   render() {
-    console.log(this.props.history)
     const { roomsArray } = this.props
     return (
       <div>
@@ -223,6 +218,10 @@ export default class HomeScreen extends Component<HomeScreenProps> {
                       description={`身份：${isOwner ? '拥有者' : '参与者'}`}
                       title={`房间号码为：${roomNo}`}
                       deleteAction={() => this.deleteRoom(item)}
+                      settingAction={() => {
+                        this.props.showAuditModal(roomNo)
+                        this.props.getPartnerInfo()
+                      }}
                     />
                   </List.Item>
                 )
