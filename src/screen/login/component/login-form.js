@@ -58,7 +58,7 @@ const Form = ({ form, pwdVisible, toRegister }: FormProps) => {
           type={pwdVisible ? 'text' : 'password'}
         />
         <ButtonGroup>
-          <Button type='primary' onClick={form.onSubmit} size='large'>
+          <Button type='primary' onClick={form.onSubmit} size='large' loading={form.submitting}>
             登录
           </Button>
           <Button size='large' onClick={toRegister}>

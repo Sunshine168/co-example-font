@@ -6,12 +6,11 @@ import { notification } from 'antd'
 
 import { PanelContainer as Container } from '../../component/base-style-component'
 import Form, { loginInForm } from './component/login-form'
-import type { IUser } from '../../store/user'
 import { withRedirect } from '../../component/hoc'
 
 type Props = {
   history: Object,
-  user: IUser,
+  login(user: Object, sucCb: (res: Object) => void, errCb: () => void): Promise<*>,
 }
 
 export const LogoWrapper = styled.div`
@@ -29,26 +28,30 @@ export const Logo = styled.h3`
 }))
 @observer
 @withRedirect('/')
-export default class Login extends Component<Props> {
+export default class Login extends Component<void, Props, *> {
   constructor(props: Props) {
     super(props)
-    loginInForm.$hooks = {
-      onSuccess: (form) => {
-        const { login } = this.props
-        login(form.values(), () => {
-          const { history } = this.props
-          notification.success({ message: '登录成功' })
-          history.push('/')
-        })
-      },
-      onError: (form) => {
-        console.log(form.errors())
-      },
+    loginInForm.$hooks.onSuccess = (form) => {
+      const { login } = this.props
+      return new Promise((resolve) => {
+        login(
+          form.values(),
+          () => {
+            notification.success({ message: '登录成功' })
+            resolve()
+          },
+          () => {
+            resolve()
+          },
+        )
+      })
+    }
+    loginInForm.$hooks.onError = (form) => {
+      console.log(form.errors())
     }
   }
 
   render() {
-    console.log(`inner render ${+new Date()}`)
     const { history } = this.props
     return (
       <Container>

@@ -44,7 +44,7 @@ export default class App extends Component {
   }
   componentDidMount = () => {
     const hydrate = create()
-    const result = hydrate('some', stores.user)
+    const result = hydrate('co-user', stores.user)
     const { rehydrate } = result
     rehydrate().then(() => {
       this.setState({

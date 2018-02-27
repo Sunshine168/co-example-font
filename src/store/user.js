@@ -20,13 +20,15 @@ class User {
   }
 
   @action.bound
-  async login(user, sucCb) {
+  async login(user, sucCb, errCb) {
     this.loginIning = true
     const result: Object = await post('/signIn', user)
     if (result) {
       this.setUser(result)
       this.loginIning = false
       sucCb(result)
+    } else {
+      errCb()
     }
   }
 
@@ -68,7 +70,7 @@ export type IUser = {
   pwdVisible: boolean,
   isLogin: boolean,
   setPwdVisible(): void,
-  login(user: Object, sucCb: (res: Object) => void): Promise<*>,
+  login(user: Object, sucCb: (res: Object) => void, errCb: () => void): Promise<*>,
 }
 
 const self: IUser = new User()
