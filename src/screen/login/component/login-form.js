@@ -51,11 +51,17 @@ const Form = ({ form, pwdVisible, toRegister }: FormProps) => {
   return (
     <form onSubmit={form.onSubmit}>
       <FormContainer>
-        <TextInput {...form.$('account').bind()} />
+        <TextInput
+          {...form.$('account').bind()}
+          error={form.errors().account}
+          help={form.errors().account ? '账号格式不正确' : null}
+        />
         <TextInput
           {...form.$('password').bind()}
           addonAfter={<EyeButton />}
           type={pwdVisible ? 'text' : 'password'}
+          error={form.errors().password}
+          help={form.errors().password ? '密码格式不正确' : null}
         />
         <ButtonGroup>
           <Button type='primary' onClick={form.onSubmit} size='large' loading={form.submitting}>

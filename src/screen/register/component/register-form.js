@@ -74,7 +74,7 @@ const Form = ({ form, toLogin, pwdVisible }: FormProps) => {
           if (field.name === 'avatar') {
             return null
           }
-
+          const err = form.errors()[field.name]
           if (field.name === 'password') {
             return (
               <TextInput
@@ -82,11 +82,20 @@ const Form = ({ form, toLogin, pwdVisible }: FormProps) => {
                 {...form.$('password').bind()}
                 addonAfter={<EyeButton />}
                 type={pwdVisible ? 'text' : 'password'}
+                error={err}
+                help={err ? err.replace(field.name, field.label) : null}
               />
             )
           }
 
-          return <TextInput {...form.$(field.name).bind()} key={field.name} />
+          return (
+            <TextInput
+              {...form.$(field.name).bind()}
+              key={field.name}
+              error={err}
+              help={err ? err.replace(field.name, field.label) : null}
+            />
+          )
         })}
         <ImgUpload {...form.$('avatar').bind()} />
         <ButtonGroup>
