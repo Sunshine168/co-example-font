@@ -13,13 +13,14 @@ type BaseMenuProps = {
   user: Object,
 }
 
+// Waiting fix menu state
 const BaseMenu = (props: BaseMenuProps) => {
   const { user } = props
   return (
     <Menu
       theme='dark'
       mode='horizontal'
-      defaultSelectedKeys={['2']}
+      defaultSelectedKeys={['1']}
       style={{ lineHeight: '64px' }}
       onClick={(item) => {
         if (item.key === '3') {
@@ -48,7 +49,7 @@ const BaseMenu = (props: BaseMenuProps) => {
           </Menu.Item>
         )}
       </SubMenu>
-      <Menu.Item key='3' path='/about'>
+      <Menu.Item key='4' path='/about'>
         关于我
       </Menu.Item>
     </Menu>
