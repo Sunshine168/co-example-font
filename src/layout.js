@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import DevTools from 'mobx-react-devtools'
-import { Layout, Menu, Breadcrumb, notification } from 'antd'
+import { Layout, Menu, notification } from 'antd'
 import { observer, inject } from 'mobx-react'
 
 const { Header, Content, Footer } = Layout

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
-import { Upload, ProcessImage } from './component'
+import { Upload, ProcessImage, ProcessImageUtilPanel } from './component'
 
 const Container = styled.div`
   display: flex;
@@ -27,6 +27,7 @@ export default class ProcessImg extends Component {
     return (
       <Container>
         <ProcessImage />
+        <ProcessImageUtilPanel />
       </Container>
     )
   }

@@ -89,7 +89,6 @@ class WorkSpace {
 
   @action.bound
   async quitRoom(roomNo, sucCb, cb) {
-    console.log('quit?')
     try {
       const result = await post(`/workspace/${roomNo}/quitRoom`)
       sucCb(result)

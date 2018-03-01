@@ -38,6 +38,7 @@ type HomeScreenProps = {
 @inject(stores => ({
   showJoinModal: () => stores.workspace.setJoinModalVisible(true),
   showCreateModal: () => stores.workspace.setCreateModalVisible(true),
+  hiddenCreateModal: () => stores.workspace.setCreateModalVisible(false),
   showAuditModal: (roomNo: string) => stores.workspace.setAuditModalVisible(true, roomNo),
   createRoom: stores.workspace.createRoom,
   joinRoom: stores.workspace.joinRoom,
@@ -54,25 +55,30 @@ type HomeScreenProps = {
 export default class HomeScreen extends Component<HomeScreenProps> {
   constructor(props: HomeScreenProps) {
     super(props)
-    createRoomForm.$hooks = {
-      onSuccess: (form) => {
-        this.props.createRoom(form.values(), (result) => {
-          const { room } = result
-          const key = `open${Date.now()}`
-          const btn = (
-            <Button type='primary' size='small' onClick={() => notification.close(key)}>
-              点击进入房间
-            </Button>
-          )
-          notification.success({
-            title: '创建成功',
-            message: `创建的房号为${room}`,
-            btn,
-            onClose: () => {},
-          })
-          this.props.getAllRooms()
+    createRoomForm.$hooks.onSuccess = (form) => {
+      console.log(form.values())
+      this.props.createRoom(form.values(), (result) => {
+        console.log(result)
+        this.props.hiddenCreateModal()
+        const { room } = result
+        const key = `open${Date.now()}`
+        const btn = (
+          <Button type='primary' size='small' onClick={() => notification.close(key)}>
+            点击进入房间
+          </Button>
+        )
+        notification.success({
+          title: '创建成功',
+          message: `创建的房号为${room}`,
+          btn,
+          onClose: () => {},
         })
-      },
+        this.props.getAllRooms()
+      })
+    }
+
+    createRoomForm.$hooks.onError = (form) => {
+      console.log('error', form.errors())
     }
 
     joinRoomForm.$hooks = {

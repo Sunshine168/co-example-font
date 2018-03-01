@@ -12,7 +12,7 @@ const fields = [
     placeholder: '请输入房间名',
     label: '房间名',
     icon: 'codepen-circle',
-    rules: 'required|email|string',
+    rules: 'required',
     size: 15,
   },
   {
@@ -58,7 +58,6 @@ export default class CreateModal extends Component<CreateModalProps> {
   handleOk = (e) => {
     const { setVisible, form } = this.props
     form.onSubmit(e)
-    setVisible(false)
   }
 
   handleCancel = () => {
@@ -85,7 +84,11 @@ export default class CreateModal extends Component<CreateModalProps> {
       >
         <p>请填写房间信息</p>
         <Form>
-          <TextInput {...form.$('name').bind()} />
+          <TextInput
+            {...form.$('name').bind()}
+            error={form.errors().name}
+            help={form.errors().name ? form.errors().name : ''}
+          />
           <ImgUpload {...form.$('img').bind()} />
           <SelectInput {...form.$('permissions').bind()} options={form.$('permissions').extra} />
         </Form>
