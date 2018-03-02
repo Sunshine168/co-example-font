@@ -9,18 +9,18 @@ const Container = styled.div`
 `
 const ImgBlock = styled.div``
 
-@inject(['processImg'])
+@inject('imgProcess')
 @observer
-export default class ProcessImg extends Component {
+export default class imgProcess extends Component {
   componentDidMount() {
-    const { initImgProcessWorkSpace } = this.props.processImage
+    const { initImgProcessWorkSpace } = this.props.imgProcess
     initImgProcessWorkSpace()
   }
 
   render() {
-    const { workingImg } = this.props.processImage
+    const { workingImg } = this.props.imgProcess
 
-    if (workingImg) {
+    if (!workingImg) {
       return <Upload />
     }
 

@@ -56,14 +56,19 @@ export default class HomeScreen extends Component<HomeScreenProps> {
   constructor(props: HomeScreenProps) {
     super(props)
     createRoomForm.$hooks.onSuccess = (form) => {
-      console.log(form.values())
       this.props.createRoom(form.values(), (result) => {
-        console.log(result)
         this.props.hiddenCreateModal()
         const { room } = result
         const key = `open${Date.now()}`
         const btn = (
-          <Button type='primary' size='small' onClick={() => notification.close(key)}>
+          <Button
+            type='primary'
+            size='small'
+            onClick={() => {
+              notification.close(key)
+              this.props.routing.push(`/workspace/${room}`)
+            }}
+          >
             点击进入房间
           </Button>
         )
@@ -78,7 +83,7 @@ export default class HomeScreen extends Component<HomeScreenProps> {
     }
 
     createRoomForm.$hooks.onError = (form) => {
-      console.log('error', form.errors())
+      console.log(form.errors())
     }
 
     joinRoomForm.$hooks = {
@@ -179,8 +184,6 @@ export default class HomeScreen extends Component<HomeScreenProps> {
         <Row>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
           </Breadcrumb>
           <UserStauts />
         </Row>

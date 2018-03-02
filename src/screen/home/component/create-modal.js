@@ -19,7 +19,6 @@ const fields = [
     name: 'img',
     label: '初始化协作图片',
     placeholder: '请上传初始协作图片',
-    rules: 'string|between:5,25',
   },
   {
     name: 'permissions',
@@ -56,7 +55,7 @@ type CreateModalProps = {
 @observer
 export default class CreateModal extends Component<CreateModalProps> {
   handleOk = (e) => {
-    const { setVisible, form } = this.props
+    const { form } = this.props
     form.onSubmit(e)
   }
 

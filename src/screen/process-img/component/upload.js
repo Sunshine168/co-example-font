@@ -10,7 +10,7 @@ function getBase64(img) {
   })
 }
 
-@inject(['imgProcess'])
+@inject('imgProcess')
 @observer
 export default class UploadHelper extends React.Component {
   handleChange = (info) => {
@@ -29,13 +29,13 @@ export default class UploadHelper extends React.Component {
   }
 
   render() {
+    const { uploadingImg, workingImg } = this.props.imgProcess
     const uploadButton = (
       <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <Icon type={uploadingImg ? 'loading' : 'plus'} />
         <div className='ant-upload-text'>Upload</div>
       </div>
     )
-    const { workingImg } = this.props.imgProcess
     return (
       <Upload
         name='avatar'

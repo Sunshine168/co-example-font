@@ -31,18 +31,6 @@ class Chat {
     this.checkRoom(roomNo)
     this.chatingUserListMap.set(roomNo, userList)
   }
-
-  @action.bound
-  async checkRoomAlive(roomNo: string, sucCb, errCb) {
-    try {
-      await post(`/workspace/${roomNo}/checkAlive`)
-      sucCb()
-    } catch (e) {
-      //
-      console.log(e)
-      errCb()
-    }
-  }
 }
 
 const self = new Chat()

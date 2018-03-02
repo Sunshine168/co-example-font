@@ -14,6 +14,8 @@ class WorkSpace {
   @observable isLoadingCheckRoomInfo = false
   @observable isInitingHome = false
   @observable partnerInfo = []
+  @observable isLoadingRoom = false
+  @observable currentRoom = null
 
   @action.bound
   setCreateModalVisible(visible) {
@@ -97,6 +99,22 @@ class WorkSpace {
       console.log(e)
     } finally {
       cb()
+    }
+  }
+
+  @action.bound
+  async checkRoomAlive(roomNo: string, sucCb, errCb) {
+    this.isLoadingRoom = true
+    try {
+      const { room } = await post(`/workspace/${roomNo}/checkAlive`)
+      this.currentRoom = room
+      sucCb(room)
+    } catch (e) {
+      //
+      console.log(e)
+      errCb()
+    } finally {
+      this.isLoadingRoom = false
     }
   }
 
