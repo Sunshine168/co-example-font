@@ -11,8 +11,7 @@ Features:
  
  RoadMap
  * co-image
- * co-exl
- * mobx with rx
+ * co-table
  * clean up code
  * test cover
 

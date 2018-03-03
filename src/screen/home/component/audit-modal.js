@@ -8,7 +8,7 @@ const { Column } = Table
 type AuditModalProps = {
   visible: boolean,
   setVisible(visible: boolean): void,
-  getPartnerInfo(): void,
+  partnersArray: Array<Object>,
 }
 
 @inject(stores => ({
@@ -34,7 +34,7 @@ export default class AuditModal extends Component<AuditModalProps> {
     return (
       <Modal
         visible={visible}
-        title='创建房间'
+        title='管理房间'
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         footer={[

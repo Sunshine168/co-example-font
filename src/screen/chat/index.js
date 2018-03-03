@@ -28,11 +28,10 @@ const ChatingListWrapper = styled.div`
   background: #fff;
 `
 
-const text = <span>prompt text</span>
-
 type ChatProps = {
   user: Object,
   chat: Object,
+  roomNo: string | number,
 }
 
 @inject(stores => ({
@@ -56,7 +55,7 @@ export default class Chat extends React.Component<ChatProps> {
     }
   }
 
-  renderChatItem(rowData: Object, sectionID: number, rowID: number) {
+  renderChatItem(rowData: Object) {
     const { data, author } = rowData
     const { user } = this.props
     const { context } = data
@@ -82,7 +81,11 @@ export default class Chat extends React.Component<ChatProps> {
           {chatingUserList.map((user) => {
             return (
               <Tooltip title={user.nickname} key={user._id}>
-                <Avatar icon='user' />
+                {user.avatar ? (
+                  <Avatar src={user.avatar} style={{ marginLeft: 5 }} />
+                ) : (
+                  <Avatar icon='user' style={{ marginLeft: 5 }} />
+                )}
               </Tooltip>
             )
           })}

@@ -7,6 +7,14 @@ class ImgProcess {
   @observable uploadingImg = false
   @observable lastActionTime
   @observable modeMap = new Map()
+  @observable quality = 100
+  @observable brightness
+  @observable flip = new Map()
+  @observable opacity = 1
+  @observable fade = 0
+  @observable blur = 0
+  @observable posterize = 1
+  @observable size = new Map()
 
   @action.bound
   setWorkingImg(img) {
@@ -21,16 +29,56 @@ class ImgProcess {
   @action.bound
   initImgProcessWorkSpace() {
     const { mode } = config
+    // init mode
     mode.forEach((item) => {
       if (!this.modeMap.has(item)) {
         this.modeMap.set(item, false)
       }
     })
+    // init size
+    this.size.set('width', 500)
+    this.size.set('height', 500)
+    this.size.set('mode', 'bicubic')
   }
 
   @action.bound
   switchMode(modeName, value) {
     this.modeMap.set(modeName, value)
+  }
+
+  @action.bound
+  qualityChange(value) {
+    this.quality = value
+  }
+
+  @action.bound
+  opacityChange(value) {
+    this.opacity = value
+  }
+
+  @action.bound
+  fadeChange(value) {
+    this.fade = value
+  }
+
+  @action.bound
+  changeFlip(flipKey, value) {
+    this.modeMap.set(flipKey, value)
+  }
+
+  @action.bound
+  blurChange(value) {
+    this.blur = value
+  }
+
+  @action.bound
+  posterizeChange(value) {
+    this.posterize = value
+  }
+
+  @action.bound
+  sizeChange(key, value) {
+    this.size.set(key, value)
   }
 }
 

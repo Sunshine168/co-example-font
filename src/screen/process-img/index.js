@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react'
 import { Upload, ProcessImage, ProcessImageUtilPanel } from './component'
 
 const Container = styled.div`
+  padding: 20px 0 0 30px;
   display: flex;
   flex-direction: row;
 `
