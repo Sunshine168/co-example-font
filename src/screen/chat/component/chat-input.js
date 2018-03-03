@@ -3,7 +3,6 @@ import React from 'react'
 import { Input, Button } from 'antd'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
-import { Emoji } from 'emoji-mart'
 
 import { MobxForm, validator } from '../../../util'
 
@@ -24,7 +23,6 @@ const fields = [
 const ChatInput = ({ form }) => {
   return (
     <div>
-      {/* <Emoji emoji='santa' set='emojione' size={16} /> */}
       <Control>
         <TextArea {...form.$('msg').bind()} />
         <Button type='primary' style={{ height: 52 }} onClick={form.onSubmit}>

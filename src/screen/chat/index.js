@@ -7,6 +7,8 @@ import { inject, observer } from 'mobx-react'
 import { Container } from '../../component/base-style-component'
 import { Bubble, ChatInput, msgForm } from './component'
 
+// import './emoji.css'
+
 const { Item } = List
 
 const UserListWrapper = styled.div`
@@ -98,7 +100,7 @@ export default class Chat extends React.Component<ChatProps> {
             renderItem={this.renderChatItem}
           />
         </ChatingListWrapper>
-        <ChatInput form={msgForm} />
+        <ChatInput form={msgForm} userList={chatingUserList.map(user => user.nickname)} />
       </Container>
     )
   }
