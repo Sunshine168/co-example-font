@@ -16,6 +16,7 @@
     "stage-0"
   ],
   "plugins": [
+    "syntax-dynamic-import",
     "flow-runtime",
     "transform-decorators-legacy",
     "react-hot-loader/babel",

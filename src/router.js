@@ -2,13 +2,11 @@
 import * as React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
+import Loadable from 'react-loadable'
+import { Spin } from 'antd'
 
 import BaseLayout from './layout'
 import Counter from './screen/demo'
-import Login from './screen/login'
-import Register from './screen/register'
-import Home from './screen/home'
-import Workspace from './screen/workspace'
 
 type PrivateRouteProps = {
   isLogin: boolean,
@@ -16,6 +14,34 @@ type PrivateRouteProps = {
   component: React.ComponentType<any>,
   CustomComponent: ?React.ComponentType<any>,
 }
+
+const Register = Loadable({
+  loader: () => import('./screen/register'),
+  loading: () => {
+    return <Spin size='large' />
+  },
+})
+
+const Login = Loadable({
+  loader: () => import('./screen/login'),
+  loading: () => {
+    return <Spin size='large' />
+  },
+})
+
+const Workspace = Loadable({
+  loader: () => import('./screen/workspace'),
+  loading: () => {
+    return <Spin size='large' />
+  },
+})
+
+const Home = Loadable({
+  loader: () => import('./screen/home'),
+  loading: () => {
+    return <Spin size='large' />
+  },
+})
 
 const PrivateRoute = ({
   component: Component,
