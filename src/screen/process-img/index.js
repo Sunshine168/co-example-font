@@ -21,6 +21,8 @@ export default class imgProcess extends Component {
   render() {
     const { workingImg } = this.props.imgProcess
 
+    const { sendImg } = this.props
+
     if (!workingImg) {
       return <Upload />
     }
@@ -28,7 +30,7 @@ export default class imgProcess extends Component {
     return (
       <Container>
         <ProcessImage />
-        <ProcessImageUtilPanel />
+        <ProcessImageUtilPanel sendImg={sendImg} />
       </Container>
     )
   }

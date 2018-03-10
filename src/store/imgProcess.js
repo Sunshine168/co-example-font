@@ -1,5 +1,5 @@
 /* @flow */
-import { observable, action } from 'mobx'
+import { observable, action, toJS } from 'mobx'
 import config from '../screen/process-img/config'
 
 class ImgProcess {
@@ -15,6 +15,19 @@ class ImgProcess {
   @observable blur = 0
   @observable posterize = 1
   @observable size = new Map()
+  @observable sendingBase64
+  @observable processingStatus: boolean = false
+  @observable workingBase64Img
+
+  @action.bound
+  setWorkingBase64Img(img) {
+    this.workingBase64Img = img
+  }
+
+  @action.bound
+  setProcessStatus(status: boolean) {
+    this.processingStatus = status
+  }
 
   @action.bound
   setWorkingImg(img) {
@@ -79,6 +92,21 @@ class ImgProcess {
   @action.bound
   sizeChange(key, value) {
     this.size.set(key, value)
+  }
+
+  @action.bound
+  getAllOptions() {
+    return {
+      mode: [...toJS(this.modeMap)],
+      size: [...toJS(this.size)],
+      switchOption: {
+        quality: this.quality,
+        opacity: this.opacity,
+        fade: this.fade,
+        blur: this.blur,
+        posterize: this.posterize,
+      },
+    }
   }
 }
 

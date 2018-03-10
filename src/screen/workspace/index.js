@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Breadcrumb } from 'antd'
+import { Breadcrumb, notification } from 'antd'
 import { Link } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import io from 'socket.io-client'
@@ -77,15 +77,8 @@ export default class Workspace extends Component<WorkSpaceProps> {
       })
 
       socket.on(roomNo, (msg) => {
-        const { chat } = this.props
-        const { data } = msg
-        const { payload } = data
-        if (payload.type === 'text') {
-          log('#receive room text info', msg)
-          chat.addChatingRecord(roomNo, payload)
-        }
-
         log('#receive room msg', msg)
+        this.receiveMsgHandler(msg)
       })
 
       // 监听自身 id 以实现 p2p 通讯
@@ -109,6 +102,22 @@ export default class Workspace extends Component<WorkSpaceProps> {
     })
   }
 
+  receiveMsgHandler = (msg) => {
+    const { roomNo } = this.props.computedMatch.params
+    const { chat, imgProcess } = this.props
+    const { data } = msg
+    const { payload } = data
+    if (payload.type === 'text' || payload.type === 'img') {
+      console.log(payload)
+      chat.addChatingRecord(roomNo, payload)
+    }
+    if (payload.type === 'sync_img') {
+      if (imgProcess.processingStatus) {
+        imgProcess.setProcessStatus(false)
+      }
+    }
+  }
+
   sendGroupTextMsg = (text: string) => {
     const { roomNo } = this.props.computedMatch.params
     this.socket.emit('exchange', {
@@ -118,6 +127,43 @@ export default class Workspace extends Component<WorkSpaceProps> {
         },
         type: 'text',
         author: this.props.user.user,
+      },
+      target: `room_${roomNo}`,
+    })
+  }
+
+  sendGroupImagMsg = () => {
+    const { roomNo } = this.props.computedMatch.params
+    const { workingBase64Img } = this.props.imgProcess
+    if (!workingBase64Img) {
+      notification.error({
+        message: '图片不能为空',
+      })
+      return
+    }
+    this.socket.emit('exchange', {
+      payload: {
+        data: {
+          context: {
+            src: workingBase64Img,
+          },
+        },
+        type: 'img',
+        author: this.props.user.user,
+      },
+      target: `room_${roomNo}`,
+    })
+  }
+
+  syncProcessImg = () => {
+    const { imgProcess } = this.props
+    const data = imgProcess.getAllOptions()
+    const { roomNo } = this.props.computedMatch.params
+    imgProcess.setProcessStatus(true)
+    this.socket.emit('exchange', {
+      payload: {
+        data: JSON.stringify(data),
+        type: 'sync_img',
       },
       target: `room_${roomNo}`,
     })
@@ -141,7 +187,7 @@ export default class Workspace extends Component<WorkSpaceProps> {
         </Row>
         <CustomContainer>
           <Chat roomNo={roomNo} sendGroupTextMsg={this.sendGroupTextMsg} />
-          <ProcessImg />
+          <ProcessImg sendImg={this.sendGroupImagMsg} />
         </CustomContainer>
       </div>
     )

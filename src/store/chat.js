@@ -5,6 +5,7 @@ import { post } from '../util/'
 class Chat {
   @observable chatingListMap: Map<string, Array<Object>> = new Map()
   @observable chatingUserListMap: Map<string, Array<Object>> = new Map()
+  @observable isSendingMediaMessage: boolean = false
 
   @action.bound
   initRoom(roomNo: string) {

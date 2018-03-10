@@ -58,16 +58,32 @@ export default class Chat extends React.Component<ChatProps> {
   }
 
   renderChatItem(rowData: Object) {
-    const { data, author } = rowData
+    const { data, author, type } = rowData
     const { user } = this.props
     const { context } = data
-    return (
-      <Item>
-        <Bubble className={author._id === user.user._id ? 'right' : 'left'} author={author}>
-          {context}
-        </Bubble>
-      </Item>
-    )
+
+    if (type === 'text') {
+      return (
+        <Item>
+          <Bubble className={author._id === user.user._id ? 'right' : 'left'} author={author}>
+            {context}
+          </Bubble>
+        </Item>
+      )
+    }
+
+    if (type === 'img') {
+      const { src } = context
+      return (
+        <Item>
+          <Bubble className={author._id === user.user._id ? 'right' : 'left'} author={author}>
+            <img width={100} height={100} src={src} />
+          </Bubble>
+        </Item>
+      )
+    }
+
+    return <div />
   }
 
   render() {

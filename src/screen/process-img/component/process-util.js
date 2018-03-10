@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Collapse, Switch, Slider } from 'antd'
+import { Collapse, Switch, Slider, Button } from 'antd'
 import { observer, inject } from 'mobx-react'
 
 import { TextInput } from '../../../component'
@@ -15,6 +15,8 @@ const SwitchWrapper = styled.div`
 const Container = styled.div`
   padding: 0 20px;
   min-width: 250px;
+  display: flex;
+  flex-direction: column;
 `
 
 const ModePreviewImg = styled.img`
@@ -42,9 +44,14 @@ export default class ProcessImgUtil extends Component {
       posterizeChange,
       size,
     } = this.props.imgProcess
+    const { sendImg } = this.props
     const modes = modeMap.keys()
     return (
       <Container>
+        <Button type='primary' onClick={sendImg}>
+          发送到聊天室
+        </Button>
+        <Button>开始同步修改图片</Button>
         <Collapse
           onChange={() => {
             console.log()
