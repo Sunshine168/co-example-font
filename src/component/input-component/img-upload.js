@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import { observable } from 'mobx'
 import { Upload, message, Icon } from 'antd'
 import styled from 'styled-components'
+import { Text } from '../base-style-component'
 import Cookies from 'js-cookie'
 
 const csrftoken = Cookies.get('csrfToken')
@@ -11,6 +12,10 @@ const csrftoken = Cookies.get('csrfToken')
 const ImgPreview = styled.img`
   width: 100px;
   height: 100px;
+`
+
+const errorTips = Text.extend`
+  color: #f4ie28;
 `
 
 function getBase64(img, callback) {
@@ -27,11 +32,17 @@ function beforeUpload(file) {
   return isLt2M
 }
 
+type ImgUploadProp = {
+  onChange(fileBase64): void,
+  error: ?boolean | string,
+  help: ?string,
+}
+
 @observer
-export default class ImgUpload extends React.Component {
+export default class ImgUpload extends React.Component<ImgUploadProp> {
   @observable imageUrl = ''
   @observable loading = false
-  handleChange = (info) => {
+  handleChange = (info: Object) => {
     if (info.file.status === 'uploading') {
       this.loading = false
       return
@@ -46,6 +57,7 @@ export default class ImgUpload extends React.Component {
   }
   render() {
     const { loading, imageUrl } = this
+    const { error, help } = this.props
     const uploadButton = (
       <div>
         <Icon type={loading ? 'loading' : 'plus'} />
@@ -54,20 +66,23 @@ export default class ImgUpload extends React.Component {
     )
 
     return (
-      <Upload
-        headers={{
-          'x-csrf-token': csrftoken,
-        }}
-        name='avatar'
-        listType='picture-card'
-        className='avatar-uploader'
-        showUploadList={false}
-        action='/upload'
-        beforeUpload={beforeUpload}
-        onChange={this.handleChange}
-      >
-        {imageUrl ? <ImgPreview src={imageUrl} alt='' /> : uploadButton}
-      </Upload>
+      <div>
+        <Upload
+          headers={{
+            'x-csrf-token': csrftoken,
+          }}
+          name='avatar'
+          listType='picture-card'
+          className='avatar-uploader'
+          showUploadList={false}
+          action='/upload'
+          beforeUpload={beforeUpload}
+          onChange={this.handleChange}
+        >
+          {imageUrl ? <ImgPreview src={imageUrl} alt='' /> : uploadButton}
+        </Upload>
+        {error ? <errorTips>{help}</errorTips> : null}
+      </div>
     )
   }
 }

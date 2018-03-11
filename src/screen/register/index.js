@@ -30,7 +30,9 @@ export default class RegisterScreen extends Component<Props> {
           })
         })
       },
-      onError: () => {},
+      onError: (form) => {
+        console.log(form.errors())
+      },
     }
   }
   render() {

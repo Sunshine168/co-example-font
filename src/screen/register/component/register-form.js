@@ -55,7 +55,6 @@ const fields = [
   {
     name: 'avatar',
     lable: '头像',
-    rules: 'required',
     value: '',
   },
 ]
