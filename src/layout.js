@@ -3,13 +3,14 @@ import * as React from 'react'
 import DevTools from 'mobx-react-devtools'
 import { Layout, Menu, notification } from 'antd'
 import { observer, inject } from 'mobx-react'
+import { withRouter } from 'react-router-dom'
 
 const { Header, Content, Footer } = Layout
 
 const { SubMenu } = Menu
 
 type BaseMenuProps = {
-  routing: Object,
+  history: Object,
   user: Object,
 }
 
@@ -25,13 +26,13 @@ const BaseMenu = (props: BaseMenuProps) => {
       onClick={(item) => {
         if (item.key === '3') {
           user.loginOut(() => {
-            props.routing.push(item.item.props.path)
+            props.history.push(item.item.props.path)
             notification.success({
               message: '注销成功',
             })
           })
         } else {
-          props.routing.push(item.item.props.path)
+          props.history.push(item.item.props.path)
         }
       }}
     >
@@ -56,10 +57,9 @@ const BaseMenu = (props: BaseMenuProps) => {
   )
 }
 
-const BaseMenuWithInject = inject(stores => ({
-  routing: stores.routing,
+const BaseMenuWithInject = withRouter(inject(stores => ({
   user: stores.user,
-}))(observer(BaseMenu))
+}))(observer(BaseMenu)))
 
 const BaseLayout = (ContentComponent: React.ComponentType<any>) => (props: Object) => {
   return (

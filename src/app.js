@@ -1,13 +1,14 @@
-import React, { Component } from 'react'
+// @flow
+import * as React from 'react'
 import { Provider } from 'mobx-react'
 import { injectGlobal, ThemeProvider } from 'styled-components'
-import { Router } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { Spin, Alert } from 'antd'
 import 'antd/dist/antd.css'
 import { create } from 'mobx-persist'
 
 import Routes from './router'
-import stores, { history } from './store'
+import stores from './store'
 import { emitter } from './util/'
 
 /* eslint-disable no-unused-expressions */
@@ -38,7 +39,16 @@ const theme = {
   color: '#ffa12f',
 }
 
-export default class App extends Component {
+type AppProps = {
+  history: Object,
+}
+
+type AppState = {
+  loading: boolean,
+}
+
+@withRouter
+export default class App extends React.Component<void, AppProps, AppState> {
   state = {
     loading: true,
   }
@@ -54,7 +64,7 @@ export default class App extends Component {
 
     emitter.on('USER_IS_INVALID', () => {
       stores.user.loginOut(() => {})
-      stores.routing.push('/login')
+      this.props.history.push('/login')
     })
   }
 
@@ -69,9 +79,7 @@ export default class App extends Component {
     return (
       <Provider {...stores}>
         <ThemeProvider theme={theme}>
-          <Router history={history}>
-            <Routes />
-          </Router>
+          <Routes />
         </ThemeProvider>
       </Provider>
     )

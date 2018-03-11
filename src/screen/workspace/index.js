@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Breadcrumb, notification } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import io from 'socket.io-client'
 
@@ -26,10 +26,10 @@ type WorkSpaceProps = {
   computedMatch: Object,
 }
 
+@withRouter
 @inject(stores => ({
   user: stores.user,
   workspace: stores.workspace,
-  routing: stores.routing,
   chat: stores.chat,
   imgProcess: stores.imgProcess,
 }))
@@ -37,7 +37,7 @@ type WorkSpaceProps = {
 export default class Workspace extends Component<WorkSpaceProps> {
   componentDidMount() {
     const { roomNo } = this.props.computedMatch.params
-    const { workspace, routing, imgProcess } = this.props
+    const { workspace, history, imgProcess } = this.props
     workspace.checkRoomAlive(
       roomNo,
       (room) => {
@@ -45,7 +45,7 @@ export default class Workspace extends Component<WorkSpaceProps> {
         imgProcess.setWorkingImg(room.img)
       },
       () => {
-        routing.push('/')
+        history.push('/')
       },
     )
   }

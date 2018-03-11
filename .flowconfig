@@ -1,12 +1,8 @@
 [ignore]
-.*/config/*.*
-.*/script/*.js
 .*/node_modules/styled-components/.*
 [include]
-
+./flow-typed
 [libs]
-flow-typed
-node_modules/mobx/lib/mobx.js.flow
 
 [options]
 esproposal.decorators=ignore

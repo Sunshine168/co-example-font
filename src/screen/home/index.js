@@ -33,6 +33,7 @@ type HomeScreenProps = {
   getAllRooms(): Promise<*>,
   getPartnerInfo(): Promise<*>,
   roomsArray: Array<Object>,
+  history: Object,
 }
 
 @inject(stores => ({
@@ -46,7 +47,6 @@ type HomeScreenProps = {
   getAllRooms: stores.workspace.getAllRooms,
   quitRoom: stores.workspace.quitRoom,
   roomsArray: stores.workspace.roomsArray,
-  routing: stores.routing,
   getPartnerInfo: stores.workspace.getPartnerInfo,
   isLoading: stores.workspace.homeScreenLoading,
 }))
@@ -66,7 +66,7 @@ export default class HomeScreen extends Component<HomeScreenProps> {
             size='small'
             onClick={() => {
               notification.close(key)
-              this.props.routing.push(`/workspace/${room}`)
+              this.props.history.push(`/workspace/${room}`)
             }}
           >
             点击进入房间

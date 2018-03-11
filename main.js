@@ -5,11 +5,10 @@ import { AppContainer } from 'react-hot-loader'
 import { BrowserRouter } from 'react-router-dom'
 import App from './src/app'
 
-
-const render = (Component) => {
+const render = Component => {
   ReactDOM.render(
     <AppContainer warnings={false}>
-      <BrowserRouter basename='/'>
+      <BrowserRouter basename="/egg-co">
         <Component />
       </BrowserRouter>
     </AppContainer>,

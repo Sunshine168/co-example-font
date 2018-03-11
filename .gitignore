@@ -59,3 +59,6 @@ typings/
 
 # build 
 build
+
+# flow-typed
+flow-typed/npm/*

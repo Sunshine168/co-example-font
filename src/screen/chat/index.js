@@ -3,6 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Avatar, List, notification, Tooltip } from 'antd'
 import { inject, observer } from 'mobx-react'
+import { withRouter } from 'react-router-dom'
 
 import { Container } from '../../component/base-style-component'
 import { Bubble, ChatInput, msgForm } from './component'
@@ -36,10 +37,10 @@ type ChatProps = {
   roomNo: string | number,
 }
 
+@withRouter
 @inject(stores => ({
   user: stores.user,
   chat: stores.chat,
-  routing: stores.routing,
 }))
 @observer
 export default class Chat extends React.Component<ChatProps> {
