@@ -54,7 +54,7 @@ module.exports = {
             options: {
               limit: 8192,
               mimetype: 'image/png',
-              name: 'static/images/[name].[ext]',
+              name: 'public/static/images/[name].[ext]',
             }
           }
         ],

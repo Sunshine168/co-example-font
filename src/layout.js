@@ -5,6 +5,8 @@ import { Layout, Menu, notification } from 'antd'
 import { observer, inject } from 'mobx-react'
 import { withRouter } from 'react-router-dom'
 
+const isDev = process.env.NODE_ENV === 'development' ? true : false
+
 const { Header, Content, Footer } = Layout
 
 const { SubMenu } = Menu
@@ -74,9 +76,9 @@ const BaseLayout = (ContentComponent: React.ComponentType<any>) => (props: Objec
         }}
       >
         <ContentComponent {...props} />
-        <DevTools />
+        {isDev ? <DevTools /> : null}
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2016 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>Simple Co example</Footer>
     </Layout>
   )
 }
