@@ -25,7 +25,7 @@ const ButtonGroup = styled.div`
 const fields = [
   {
     name: 'account',
-    placeholder: '请输入账户名/手机号',
+    placeholder: '请输入邮箱',
     label: '账号',
     icon: 'user',
     rules: 'required|email|string',

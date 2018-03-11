@@ -42,14 +42,14 @@ const fields = [
     name: 'confirmPwd',
     label: '确认密码',
     placeholder: '请确认登录密码',
-    rules: 'required|string|same password',
+    rules: 'required|string|same:password',
     icon: 'lock',
   },
   {
     name: 'nickname',
     label: '昵称',
     placeholder: '请输入昵称',
-    rules: 'required|string|nickname',
+    rules: 'required|string|between:5,25',
     icon: 'lock',
   },
   {
