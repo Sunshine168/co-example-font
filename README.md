@@ -2,6 +2,10 @@
 
 mobx+react+react-routerv4+socket.io+styled-components+flow 
  
+ [online]((http://139.199.152.83:7001/) )
+
+ [server](https://github.com/Sunshine168/co-example-server)
+
 Features:
  * hmr support
  * eslint code style-check
