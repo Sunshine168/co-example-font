@@ -32,7 +32,7 @@ type JoinModalProps = {
 export default class JoinModal extends Component<JoinModalProps> {
   componentDidMount() {}
 
-  handleOk = (e) => {
+  handleOk = (e: SyntheticEvent<Button>) => {
     const { setVisible, form } = this.props
     form.onSubmit(e)
     setVisible(false)

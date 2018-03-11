@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import { Breadcrumb, notification } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
@@ -24,6 +24,9 @@ const Row = styled.div`
 
 type WorkSpaceProps = {
   computedMatch: Object,
+  workspace: Object,
+  history: Object,
+  imgProcess: Object,
 }
 
 @withRouter
@@ -34,7 +37,7 @@ type WorkSpaceProps = {
   imgProcess: stores.imgProcess,
 }))
 @observer
-export default class Workspace extends Component<WorkSpaceProps> {
+export default class Workspace extends React.Component<WorkSpaceProps> {
   componentDidMount() {
     const { roomNo } = this.props.computedMatch.params
     const { workspace, history, imgProcess } = this.props
@@ -48,6 +51,12 @@ export default class Workspace extends Component<WorkSpaceProps> {
         history.push('/')
       },
     )
+  }
+
+  componentWillUnmount = () => {
+    if (this.socket) {
+      this.socket.disconnect()
+    }
   }
 
   loadSocket = () => {
@@ -102,13 +111,12 @@ export default class Workspace extends Component<WorkSpaceProps> {
     })
   }
 
-  receiveMsgHandler = (msg) => {
+  receiveMsgHandler = (msg: Object) => {
     const { roomNo } = this.props.computedMatch.params
     const { chat, imgProcess } = this.props
     const { data } = msg
     const { payload } = data
     if (payload.type === 'text' || payload.type === 'img') {
-      console.log(payload)
       chat.addChatingRecord(roomNo, payload)
     }
     if (payload.type === 'sync_img') {

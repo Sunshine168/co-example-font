@@ -35,6 +35,7 @@ type ChatProps = {
   user: Object,
   chat: Object,
   roomNo: string | number,
+  sendGroupTextMsg(msg: string): void,
 }
 
 @withRouter

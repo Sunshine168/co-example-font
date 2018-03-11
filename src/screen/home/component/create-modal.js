@@ -54,7 +54,7 @@ type CreateModalProps = {
 }))
 @observer
 export default class CreateModal extends Component<CreateModalProps> {
-  handleOk = (e) => {
+  handleOk = (e: SyntheticEvent<Button>) => {
     const { form } = this.props
     form.onSubmit(e)
   }

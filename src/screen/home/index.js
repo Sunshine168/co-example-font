@@ -26,6 +26,7 @@ type HomeScreenProps = {
   showJoinModal(): void,
   showCreateModal(): void,
   showAuditModal(roomNo: string): void,
+  hiddenCreateModal(): void,
   createRoom(room: Object, sucCb: (Object) => void): Promise<*>,
   joinRoom(room: Object, sucCb: (Object) => void): Promise<*>,
   deleteRoom(roomNo: string | number, sucCb: (Object) => void): Promise<*>,
