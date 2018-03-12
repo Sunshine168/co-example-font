@@ -1,6 +1,5 @@
 /* @flow */
 import { observable, action } from 'mobx'
-import { post } from '../util/'
 
 class Chat {
   @observable chatingListMap: Map<string, Array<Object>> = new Map()

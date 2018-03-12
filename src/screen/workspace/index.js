@@ -7,6 +7,7 @@ import { inject, observer } from 'mobx-react'
 import io from 'socket.io-client'
 
 import Chat from '../chat'
+import ChatStore from '../../store/chat'
 import ProcessImg from '../process-img'
 import { UserStauts } from '../../component/'
 
@@ -27,6 +28,7 @@ type WorkSpaceProps = {
   workspace: Object,
   history: Object,
   imgProcess: Object,
+  chat: typeof ChatStore,
 }
 
 @withRouter

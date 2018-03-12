@@ -1,18 +1,24 @@
-import React, { Component } from 'react'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
 import { Upload, ProcessImage, ProcessImageUtilPanel } from './component'
+import type { IImgProcess } from '../../store/imgProcess'
 
 const Container = styled.div`
   padding: 20px 0 0 30px;
   display: flex;
   flex-direction: row;
 `
-const ImgBlock = styled.div``
+
+type imgProcessProps = {
+  imgProcess: IImgProcess,
+  sendImg(img: string): void,
+}
 
 @inject('imgProcess')
 @observer
-export default class imgProcess extends Component {
+export default class imgProcess extends React.Component<void, imgProcessProps, *> {
   componentDidMount() {
     const { initImgProcessWorkSpace } = this.props.imgProcess
     initImgProcessWorkSpace()

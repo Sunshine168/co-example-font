@@ -2,25 +2,55 @@
 import { observable, action, toJS } from 'mobx'
 import config from '../screen/process-img/config'
 
-type IImgProcess = {}
+export type IImgProcess = {
+  workingImg: stirng,
+  uploadingImg: boolean,
+  lastActionTime: number,
+  modeMap: Map<string, boolean>,
+  quality: number,
+  brightness: number,
+  flip: Map<string, number>,
+  opacity: number,
+  fade: number,
+  blur: number,
+  posterize: number,
+  size: Map<string, string | number>,
+  sendingBase64: boolean,
+  processingStatus: boolean,
+  workingBase64Img: string,
+  isSyncingImg: boolean,
+  changeSyncStatus(status: boolean): void,
+  setWorkingBase64Img(img: string): void,
+  setProcessStatus(status: boolean): void,
+  setWorkingImg(img: string): void,
+  setUploadingImg(img: string): void,
+  initImgProcessWorkSpace(): void,
+  switchMode(modeName: string, value: boolean): void,
+  qualityChange(value: number): void,
+  fadeChange(value: number): void,
+  changeFlip(flipKey: string, value: number | string): void,
+  blurChange(value: string): void,
+  posterizeChange(value: string): void,
+  sizeChange(value: string): void,
+}
 
 class ImgProcess {
-  @observable workingImg: string = ''
-  @observable uploadingImg: boolean = false
-  @observable lastActionTime: number
+  @observable workingImg = ''
+  @observable uploadingImg = false
+  @observable lastActionTime
   @observable modeMap = new Map()
-  @observable quality: number = 100
+  @observable quality = 100
   @observable brightness
   @observable flip = new Map()
-  @observable opacity: number = 1
-  @observable fade: number = 0
-  @observable blur: number = 0
-  @observable posterize: number = 100
+  @observable opacity = 1
+  @observable fade = 0
+  @observable blur = 0
+  @observable posterize = 100
   @observable size = new Map()
-  @observable sendingBase64: string
-  @observable processingStatus: boolean = false
+  @observable sendingBase64
+  @observable processingStatus = false
   @observable workingBase64Img
-  @observable isSyncingImg: boolean = false
+  @observable isSyncingImg = false
 
   @action.bound
   changeSyncStatus(status) {
@@ -33,7 +63,7 @@ class ImgProcess {
   }
 
   @action.bound
-  setProcessStatus(status: boolean) {
+  setProcessStatus(status) {
     this.processingStatus = status
   }
 
@@ -118,5 +148,5 @@ class ImgProcess {
   }
 }
 
-const self = new ImgProcess()
+const self: IImgProcess = new ImgProcess()
 export default self
