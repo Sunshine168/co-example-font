@@ -2,22 +2,30 @@
 import { observable, action, toJS } from 'mobx'
 import config from '../screen/process-img/config'
 
+type IImgProcess = {}
+
 class ImgProcess {
-  @observable workingImg = ''
-  @observable uploadingImg = false
-  @observable lastActionTime
+  @observable workingImg: string = ''
+  @observable uploadingImg: boolean = false
+  @observable lastActionTime: number
   @observable modeMap = new Map()
-  @observable quality = 100
+  @observable quality: number = 100
   @observable brightness
   @observable flip = new Map()
-  @observable opacity = 1
-  @observable fade = 0
-  @observable blur = 0
-  @observable posterize = 1
+  @observable opacity: number = 1
+  @observable fade: number = 0
+  @observable blur: number = 0
+  @observable posterize: number = 100
   @observable size = new Map()
-  @observable sendingBase64
+  @observable sendingBase64: string
   @observable processingStatus: boolean = false
   @observable workingBase64Img
+  @observable isSyncingImg: boolean = false
+
+  @action.bound
+  changeSyncStatus(status) {
+    this.isSyncingImg = status
+  }
 
   @action.bound
   setWorkingBase64Img(img) {

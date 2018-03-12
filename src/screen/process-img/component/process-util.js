@@ -43,6 +43,8 @@ export default class ProcessImgUtil extends Component {
       posterize,
       posterizeChange,
       size,
+      isSyncingImg,
+      changeSyncStatus,
     } = this.props.imgProcess
     const { sendImg } = this.props
     const modes = modeMap.keys()
@@ -51,7 +53,13 @@ export default class ProcessImgUtil extends Component {
         <Button type='primary' onClick={sendImg}>
           发送到聊天室
         </Button>
-        <Button>开始同步修改图片</Button>
+        <Button
+          onClick={() => {
+            changeSyncStatus(!isSyncingImg)
+          }}
+        >
+          {`${isSyncingImg ? '停止' : '开始'}`}同步修改图片
+        </Button>
         <Collapse
           onChange={() => {
             console.log()
@@ -119,12 +127,12 @@ export default class ProcessImgUtil extends Component {
           </Panel>
           <Panel header='blur'>
             <SwitchWrapper>
-              <Slider min={1} max={100} onChange={blurChange} value={blur} />
+              <Slider min={0} max={100} onChange={blurChange} value={blur} />
             </SwitchWrapper>
           </Panel>
           <Panel header='opacity'>
             <SwitchWrapper>
-              <Slider min={0} max={1} onChange={opacityChange} value={opacity} />
+              <Slider step={0.1} min={0} max={1} onChange={opacityChange} value={opacity} />
             </SwitchWrapper>
           </Panel>
           <Panel header='posterize'>
