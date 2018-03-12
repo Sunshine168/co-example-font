@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import { findDOMNode } from 'react-dom'
 import styled from 'styled-components'
 import { Avatar, List, notification, Tooltip } from 'antd'
 import { inject, observer } from 'mobx-react'
@@ -59,6 +60,17 @@ export default class Chat extends React.Component<ChatProps> {
     }
   }
 
+  componentDidUpdate = (prevProps: ChatProps) => {
+    const { chat, roomNo } = this.props
+    const { chatingListMap } = chat
+    const chatingList = chatingListMap.get(roomNo)
+    if (chatingList && chatingList.length > 0) {
+      if (this.chatingWrapper) {
+        findDOMNode(this.chatingWrapper).scrollTop = 10000
+      }
+    }
+  }
+
   renderChatItem(rowData: Object) {
     const { data, author, type } = rowData
     const { user } = this.props
@@ -110,7 +122,7 @@ export default class Chat extends React.Component<ChatProps> {
             )
           })}
         </UserListWrapper>
-        <ChatingListWrapper>
+        <ChatingListWrapper ref={element => (this.chatingWrapper = element)}>
           <List
             split={false}
             itemLayout='vertical'
@@ -118,7 +130,7 @@ export default class Chat extends React.Component<ChatProps> {
             renderItem={this.renderChatItem}
           />
         </ChatingListWrapper>
-        <ChatInput form={msgForm} userList={chatingUserList.map(user => user.nickname)} />
+        <ChatInput form={msgForm} onPressEnter={msgForm.onSubmit} />
       </Container>
     )
   }

@@ -20,11 +20,11 @@ const fields = [
   },
 ]
 
-const ChatInput = ({ form }) => {
+const ChatInput = ({ form, ...otherProps }) => {
   return (
     <div>
       <Control>
-        <TextArea {...form.$('msg').bind()} />
+        <TextArea {...form.$('msg').bind()} {...otherProps} />
         <Button type='primary' style={{ height: 52 }} onClick={form.onSubmit}>
           发送
         </Button>
