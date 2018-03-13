@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 import { Collapse, Switch, Slider, Button } from 'antd'
 import { observer, inject } from 'mobx-react'
-
+import type { IImgProcess } from '../../../store/imgProcess'
 import { TextInput } from '../../../component'
 
 const { Panel } = Collapse
@@ -25,9 +26,14 @@ const ModePreviewImg = styled.img`
   margin-left: 15px;
 `
 
+type ProcessImgUtilProps = {
+  imgProcess: IImgProcess,
+  sendImg(): void,
+}
+
 @inject('imgProcess')
 @observer
-export default class ProcessImgUtil extends Component {
+export default class ProcessImgUtil extends React.Component<void, ProcessImgUtilProps, *> {
   render() {
     const {
       modeMap,
@@ -38,8 +44,6 @@ export default class ProcessImgUtil extends Component {
       blurChange,
       opacity,
       opacityChange,
-      fade,
-      fadeChange,
       posterize,
       posterizeChange,
       size,
@@ -47,7 +51,6 @@ export default class ProcessImgUtil extends Component {
       changeSyncStatus,
     } = this.props.imgProcess
     const { sendImg } = this.props
-    const modes = modeMap.keys()
     return (
       <Container>
         <Button type='primary' onClick={sendImg}>
@@ -60,11 +63,7 @@ export default class ProcessImgUtil extends Component {
         >
           {`${isSyncingImg ? '停止' : '开始'}`}同步修改图片
         </Button>
-        <Collapse
-          onChange={() => {
-            console.log()
-          }}
-        >
+        <Collapse>
           <Panel header='normalize'>
             <SwitchWrapper>
               <Switch

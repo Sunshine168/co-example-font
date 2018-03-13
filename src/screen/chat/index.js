@@ -45,7 +45,7 @@ type ChatProps = {
   chat: stores.chat,
 }))
 @observer
-export default class Chat extends React.Component<ChatProps> {
+export default class Chat extends React.Component<void, ChatProps, *> {
   constructor(props: ChatProps) {
     super(props)
     this.renderChatItem = this.renderChatItem.bind(this)
@@ -60,7 +60,7 @@ export default class Chat extends React.Component<ChatProps> {
     }
   }
 
-  componentDidUpdate = (prevProps: ChatProps) => {
+  componentDidUpdate = () => {
     const { chat, roomNo } = this.props
     const { chatingListMap } = chat
     const chatingList = chatingListMap.get(roomNo)
@@ -70,6 +70,7 @@ export default class Chat extends React.Component<ChatProps> {
       }
     }
   }
+  renderChatItem: React.Node
 
   renderChatItem(rowData: Object) {
     const { data, author, type } = rowData
