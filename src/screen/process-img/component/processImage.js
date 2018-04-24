@@ -1,21 +1,22 @@
+// @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
-import ProcessImage from '../../../component/react-imgpro'
-import map2object from '../../../util/map2object'
+import ProcessImage from 'react-imgpro'
 import getProcessOptions from '../util/getProcessOptions'
+import { type IImgProcess } from '../../../store/imgProcess'
 
-/*
-* waiting the Pr review,import lib in local, before react-imgpro new version published
-* https://github.com/nitin42/react-imgpro/pull/10
-*/
+type AdaptiveProcessImageProps = {
+  imgProcess: IImgProcess,
+}
 
 @inject('imgProcess')
 @observer
-export default class AdaptiveProcessImage extends Component {
+export default class AdaptiveProcessImage extends Component<AdaptiveProcessImageProps> {
   render() {
     const { setWorkingBase64Img, modeMap, workingImg } = this.props.imgProcess
-    const modeSetting = map2object(modeMap)
+    const modeSetting = toJS(modeMap)
     const processOptions = getProcessOptions(this.props.imgProcess)
     return (
       <div>
