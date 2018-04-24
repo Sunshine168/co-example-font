@@ -1,6 +1,3 @@
-import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
-import createBrowserHistory from 'history/createBrowserHistory'
-
 import counter from './counter'
 import user from './user'
 import workspace from './workspace'
