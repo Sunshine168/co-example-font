@@ -3,9 +3,17 @@ import { observable, action } from 'mobx'
 import { persist } from 'mobx-persist'
 import { post } from '../util/'
 
+type IUser = {
+  loginIning: boolean,
+  registering: boolean,
+  pwdVisible: boolean,
+  isLogin: boolean,
+  user: Object,
+}
+
 class User {
   @observable loginIning = false
-  @observable registerIng = false
+  @observable registering = false
   @observable pwdVisible = false
   @persist
   @observable
@@ -59,9 +67,9 @@ class User {
 
   @action.bound
   async register(user, sucCb) {
-    this.registerIng = true
+    this.registering = true
     const result: Object = await post('/signUp', user)
-    this.registerIng = false
+    this.registering = false
     sucCb(result)
   }
 }

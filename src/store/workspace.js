@@ -2,6 +2,21 @@
 import { observable, action, computed } from 'mobx'
 import { post } from '../util/'
 
+type IWorkSpace = {
+  createModalVisible: boolean,
+  createModalLoading: boolean,
+  auditModalVisible: boolean,
+  auditModalLoading: boolean,
+  joinModalLoading: boolean,
+  checkingRoomNo: string,
+  rooms: Array<Object>,
+  isLoadingCheckRoomInfo: boolean,
+  isInitingHome: boolean,
+  partnerInfo: Array<Object>,
+  isLoadingRoom: boolean,
+  currentRoom: Object,
+}
+
 class WorkSpace {
   @observable createModalVisible = false
   @observable createModalLoading = false

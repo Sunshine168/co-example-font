@@ -1,6 +1,12 @@
 /* @flow */
 import { observable, action } from 'mobx'
 
+export type IChat = {
+  chatingListMap: Map<string, Array<Object>>,
+  chatingUserListMap: Map<string, Array<Object>>,
+  isSendingMediaMessage: boolean,
+}
+
 class Chat {
   @observable chatingListMap: Map<string, Array<Object>> = new Map()
   @observable chatingUserListMap: Map<string, Array<Object>> = new Map()

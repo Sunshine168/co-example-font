@@ -10,7 +10,7 @@ type Props = {
   user: Object,
 }
 
-@inject(['user'])
+@inject('user')
 @observer
 export default class RegisterScreen extends Component<Props> {
   constructor(props: Props) {
