@@ -95,7 +95,6 @@ class WorkSpace {
     this.isLoadingCheckRoomInfo = true
     try {
       const { result } = await post(`/workspace/${this.checkingRoomNo}/partners`)
-      console.log(result)
       this.partnerInfo = result
     } catch (e) {
       //

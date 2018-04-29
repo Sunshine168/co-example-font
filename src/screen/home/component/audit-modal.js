@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { Modal, Button, Table } from 'antd'
 
+import post from '../../../util/fetch'
+
 const { Column } = Table
 
 type AuditModalProps = {
@@ -29,6 +31,19 @@ export default class AuditModal extends Component<AuditModalProps> {
     setVisible(false)
   }
 
+  uploadJoinStatus = async (user_id, queryRoom, status) => {
+    try {
+      await post('/workspace/updatePartnerStatus', {
+        user_id,
+        queryRoom,
+        status,
+      })
+      this.props.getPartnerInfo()
+    } catch (e) {
+      //
+    }
+  }
+
   render() {
     const { visible, partnersArray } = this.props
     return (
@@ -46,7 +61,7 @@ export default class AuditModal extends Component<AuditModalProps> {
           </Button>,
         ]}
       >
-        <Table dataSource={partnersArray} pagination={false} bordered>
+        <Table dataSource={partnersArray} pagination={false} bordered rowKey={record => record._id}>
           <Column title='账号名' dataIndex='account' key='account' />
           <Column title='用户昵称' dataIndex='nickname' key='nickname' />
           <Column
@@ -54,17 +69,39 @@ export default class AuditModal extends Component<AuditModalProps> {
             title='操作'
             key='action'
             render={(text, record) => {
-              if (record.stauts === 0) {
+              if (record.status === 0) {
                 return (
                   <div>
-                    <Button type='primary' style={{ marginRight: 15 }}>
+                    <Button
+                      type='primary'
+                      style={{ marginRight: 15 }}
+                      onClick={() => {
+                        this.uploadJoinStatus(record._id, record.roomNo, 1)
+                      }}
+                    >
                       允许
                     </Button>
-                    <Button type='danger'>拒绝</Button>
+                    <Button
+                      type='danger'
+                      onClick={() => {
+                        this.uploadJoinStatus(record._id, record.roomNo, 2)
+                      }}
+                    >
+                      拒绝
+                    </Button>
                   </div>
                 )
               }
-              return null
+              return (
+                <Button
+                  type='danger'
+                  onClick={() => {
+                    this.uploadJoinStatus(record._id, record.roomNo, -1)
+                  }}
+                >
+                  移除
+                </Button>
+              )
             }}
           />
         </Table>

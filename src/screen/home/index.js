@@ -262,8 +262,15 @@ export default class HomeScreen extends Component<HomeScreenProps> {
                         }
                       }}
                       settingAction={() => {
-                        this.props.showAuditModal(roomNo)
-                        this.props.getPartnerInfo()
+                        if (isOwner) {
+                          this.props.showAuditModal(roomNo)
+                          this.props.getPartnerInfo()
+                        } else {
+                          notification.error({
+                            title: '权限不足',
+                            message: '你不是房主或管理员',
+                          })
+                        }
                       }}
                     />
                   </List.Item>
