@@ -5,6 +5,7 @@ import { Collapse, Switch, Slider, Button } from 'antd'
 import { observer, inject } from 'mobx-react'
 import type { IImgProcess } from '../../../store/imgProcess'
 import { TextInput } from '../../../component'
+import emitter from '../../../util/event-mitter'
 
 const { Panel } = Collapse
 
@@ -34,6 +35,23 @@ type ProcessImgUtilProps = {
 @inject('imgProcess')
 @observer
 export default class ProcessImgUtil extends React.Component<void, ProcessImgUtilProps, *> {
+  afterParamChange = (action) => {
+    if (action) {
+      action()
+    }
+  }
+
+  syncInformAction = () => {
+    emitter.emit('PROCESS_STATE_CHANGE')
+  }
+
+  syncActionWrapper = async (action, extraAction) => {
+    const { isSyncingImg } = this.props.imgProcess
+    await action()
+    if (isSyncingImg) {
+      extraAction()
+    }
+  }
   render() {
     const {
       modeMap,
@@ -69,7 +87,10 @@ export default class ProcessImgUtil extends React.Component<void, ProcessImgUtil
               <Switch
                 checked={modeMap.get('normalize')}
                 onChange={(value) => {
-                  switchMode('normalize', value)
+                  this.syncActionWrapper(
+                    () => switchMode('normalize', value),
+                    this.syncInformAction,
+                  )
                 }}
               />
               <ModePreviewImg src={require('../../../assets/imgProcess/img-mode/normalize.png')} />
@@ -80,7 +101,10 @@ export default class ProcessImgUtil extends React.Component<void, ProcessImgUtil
               <Switch
                 checked={modeMap.get('greyscale')}
                 onChange={(value) => {
-                  switchMode('greyscale', value)
+                  this.syncActionWrapper(
+                    () => switchMode('greyscale', value),
+                    this.syncInformAction,
+                  )
                 }}
               />
               <ModePreviewImg src={require('../../../assets/imgProcess/img-mode/greyscale.png')} />
@@ -91,7 +115,7 @@ export default class ProcessImgUtil extends React.Component<void, ProcessImgUtil
               <Switch
                 checked={modeMap.get('invert')}
                 onChange={(value) => {
-                  switchMode('invert', value)
+                  this.syncActionWrapper(() => switchMode('invert', value), this.syncInformAction)
                 }}
               />
               <ModePreviewImg src={require('../../../assets/imgProcess/img-mode/invert.png')} />
@@ -102,7 +126,7 @@ export default class ProcessImgUtil extends React.Component<void, ProcessImgUtil
               <Switch
                 checked={modeMap.get('sepia')}
                 onChange={(value) => {
-                  switchMode('sepia', value)
+                  this.syncActionWrapper(() => switchMode('sepia', value), this.syncInformAction)
                 }}
               />
               <ModePreviewImg src={require('../../../assets/imgProcess/img-mode/sepia.png')} />
@@ -113,7 +137,10 @@ export default class ProcessImgUtil extends React.Component<void, ProcessImgUtil
               <Switch
                 checked={modeMap.get('dither565')}
                 onChange={(value) => {
-                  switchMode('dither565', value)
+                  this.syncActionWrapper(
+                    () => switchMode('dither565', value),
+                    this.syncInformAction,
+                  )
                 }}
               />
               <ModePreviewImg src={require('../../../assets/imgProcess/img-mode/dither565.png')} />
@@ -121,34 +148,71 @@ export default class ProcessImgUtil extends React.Component<void, ProcessImgUtil
           </Panel>
           <Panel header='quality'>
             <SwitchWrapper>
-              <Slider min={1} max={100} onChange={qualityChange} value={quality} />
+              <Slider
+                min={1}
+                max={100}
+                onChange={(value) => {
+                  this.syncActionWrapper(() => qualityChange(value), this.syncInformAction)
+                }}
+                value={quality}
+              />
             </SwitchWrapper>
           </Panel>
           <Panel header='blur'>
             <SwitchWrapper>
-              <Slider min={0} max={100} onChange={blurChange} value={blur} />
+              <Slider
+                min={0}
+                max={100}
+                onChange={(value) => {
+                  this.syncActionWrapper(() => blurChange(value), this.syncInformAction)
+                }}
+                value={blur}
+              />
             </SwitchWrapper>
           </Panel>
           <Panel header='opacity'>
             <SwitchWrapper>
-              <Slider step={0.1} min={0} max={1} onChange={opacityChange} value={opacity} />
+              <Slider
+                step={0.1}
+                min={0}
+                max={1}
+                onChange={(value) => {
+                  this.syncActionWrapper(() => opacityChange(value), this.syncInformAction)
+                }}
+                value={opacity}
+              />
             </SwitchWrapper>
           </Panel>
           <Panel header='posterize'>
             <SwitchWrapper>
-              <Slider min={1} max={100} onChange={posterizeChange} value={posterize} />
+              <Slider
+                min={1}
+                max={100}
+                onChange={(value) => {
+                  this.syncActionWrapper(() => posterizeChange(value), this.syncInformAction)
+                }}
+                value={posterize}
+              />
             </SwitchWrapper>
           </Panel>
           <Panel header='resize'>
             <TextInput
               value={size.get('width')}
-              onChange={event => size.set('width', event.target.value)}
+              onChange={(event) => {
+                this.syncActionWrapper(
+                  () => size.set('width', event.target.value),
+                  this.syncInformAction,
+                )
+              }}
               label='宽度'
             />
             <TextInput
               value={size.get('height')}
               onChange={(event) => {
-                size.set('height', event.target.value)
+                this.syncActionWrapper(
+                  () => size.set('height', event.target.value),
+                  this.syncInformAction,
+                )
               }}
               label='高度'
             />

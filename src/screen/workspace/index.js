@@ -10,6 +10,7 @@ import Chat from '../chat'
 import ChatStore from '../../store/chat'
 import ProcessImg from '../process-img'
 import { UserStauts } from '../../component/'
+import emitter from '../../util/event-mitter'
 
 const CustomContainer = styled.div`
   display: flex;
@@ -53,6 +54,24 @@ export default class Workspace extends React.Component<WorkSpaceProps> {
         history.push('/')
       },
     )
+    emitter.on('PROCESS_STATE_CHANGE', () => {
+      const { imgProcess } = this.props
+      const options = JSON.stringify(imgProcess.getAllOptions())
+      if (this.socket) {
+        this.socket.emit('exchange', {
+          payload: {
+            data: {
+              context: {
+                options,
+              },
+            },
+            type: 'sync_action',
+            author: this.props.user.user,
+          },
+          target: `room_${roomNo}`,
+        })
+      }
+    })
   }
 
   componentWillUnmount = () => {
@@ -115,7 +134,7 @@ export default class Workspace extends React.Component<WorkSpaceProps> {
 
   receiveMsgHandler = (msg: Object) => {
     const { roomNo } = this.props.computedMatch.params
-    const { chat, imgProcess } = this.props
+    const { chat, imgProcess, user } = this.props
     const { data } = msg
     const { payload } = data
     if (payload.type === 'text' || payload.type === 'img') {
@@ -124,6 +143,14 @@ export default class Workspace extends React.Component<WorkSpaceProps> {
     if (payload.type === 'sync_img') {
       if (imgProcess.processingStatus) {
         imgProcess.setProcessStatus(false)
+      }
+    }
+    if (payload.type === 'sync_action') {
+      const jsonOptions = payload.data.context.options
+      const options = JSON.parse(jsonOptions)
+      if (payload.author._id !== user.user._id) {
+        console.log('receive other action')
+        imgProcess.syncImgState(options)
       }
     }
   }

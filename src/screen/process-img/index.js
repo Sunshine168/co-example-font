@@ -25,13 +25,14 @@ export default class imgProcess extends React.Component<void, imgProcessProps, *
   }
 
   render() {
+    console.log(this.props.imgProcess)
     const { workingImg } = this.props.imgProcess
 
     const { sendImg } = this.props
 
-    if (!workingImg) {
-      return <Upload />
-    }
+    // if (!workingImg) {
+    //   return <Upload />
+    // }
 
     return (
       <Container>

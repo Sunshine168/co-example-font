@@ -113,7 +113,7 @@ class ImgProcess {
   }
 
   @action.bound
-  changeFlip(flipKey, value) {
+  flipChange(flipKey, value) {
     this.modeMap.set(flipKey, value)
   }
 
@@ -145,6 +145,40 @@ class ImgProcess {
         posterize: this.posterize,
       },
     }
+  }
+
+  syncMapState = (passIn, originMap, changeAction) => {
+    if (!passIn || !originMap) {
+      return
+    }
+    passIn.forEach((modeItem) => {
+      const keys = Object.keys(modeItem)
+      keys.forEach((key) => {
+        const value = originMap.get(key)
+        if (value !== modeItem[key]) {
+          changeAction(key, modeItem[key])
+        }
+      })
+    })
+  }
+
+  @action.bound
+  syncImgState(state) {
+    if (!state) {
+      return
+    }
+    const { mode, size, switchOption } = state
+    this.syncMapState(mode, this.modeMap, this.switchMode)
+    if (switchOption) {
+      const keys = Object.keys(switchOption)
+      keys.forEach((key) => {
+        if (switchOption[key] !== this[key]) {
+          const changeMethod = this[`${key}Change`]
+          changeMethod(switchOption[key])
+        }
+      })
+    }
+    this.syncImgState(size, this.size, this.sizeChange)
   }
 }
 
